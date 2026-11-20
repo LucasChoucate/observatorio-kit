@@ -4,13 +4,13 @@ Aplicação web que integra dados públicos do IBGE (Censo 2022), do IPEA (Atlas
 
 Projeto integrador da UC Desenvolvimento Fullstack, SENAI CIMATEC, Prof. Celso Barreto (AV3).
 
-**Aplicação publicada:** [preencher na etapa A]
+**Aplicação publicada:** [preencher após o primeiro deploy na Vercel]
 
 ## Equipe
 
 | Etapa | Integrante | GitHub | Responsabilidade |
 |---|---|---|---|
-| A | [nome] | [@usuario] | Fundação do projeto (repositório, Supabase, React, Vercel), dados demográficos, Tela 1 |
+| A | Lucas Choucate | [@usuario] | Fundação do projeto (repositório, Supabase, React, Vercel), dados demográficos, Tela 1 |
 | B | [nome] | [@usuario] | Renda, escolaridade e habitação, Tela 2 (comparativo) |
 | C | [nome] | [@usuario] | Infraestrutura urbana, malha territorial, Tela 3 (mapa) |
 | D | [nome] | [@usuario] | Dados energéticos (EPE), proxies socioenergéticos, Tela 4 |
@@ -52,7 +52,43 @@ Leia `docs/REQUISITOS.md` e o arquivo da sua etapa em `docs/etapas/`. Dá para a
 
 ## Como rodar localmente
 
-[preencher na etapa A: comandos do frontend e do ETL]
+Pré-requisitos: Node.js 20 ou mais recente, Python 3.10 ou mais recente e Git. As chaves do Supabase são
+passadas pelo responsável da etapa A **por mensagem privada**, nunca pelo repositório.
+
+### Frontend (`web/`)
+
+```bash
+cd web
+cp .env.example .env.local      # preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+npm install
+npm run dev                     # http://localhost:5173
+```
+
+Outros comandos: `npm run lint`, `npm run format`, `npm test` e `npm run build`.
+
+### ETL (`etl/`)
+
+```bash
+python -m venv etl/.venv
+# Windows: etl.venvScriptsctivate    Linux/macOS: source etl/.venv/bin/activate
+pip install -r etl/requirements.txt
+cp etl/.env.example etl/.env    # preencha SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (nunca no frontend)
+```
+
+1. Baixe os arquivos listados em `data/raw/README.md` e descompacte em `data/raw/`.
+2. Rode o script da etapa. Exemplo da etapa A:
+   ```bash
+   python etl/a_demografia.py              # trata, valida, gera CSV e relatório e carrega no Supabase
+   python etl/a_demografia.py --sem-carga  # só trata e valida, sem precisar do etl/.env
+   ```
+   Saídas: `data/processed/a_demografia.csv` e `docs/qualidade/a_demografia.md`. O script pode ser
+   rodado várias vezes sem duplicar dados (upsert).
+
+### Banco (Supabase)
+
+Execute no SQL Editor do Supabase, nesta ordem: `supabase/migrations/001_schema.sql`,
+`supabase/migrations/002_rls.sql` e `supabase/seeds/001_territorios_fontes.sql`. Migrations novas
+recebem o próximo número e nunca editam as já aplicadas.
 
 ## Documentação
 
