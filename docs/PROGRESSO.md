@@ -1,6 +1,6 @@
 # Progresso do projeto
 
-> **Etapa atual: A** (em andamento)
+> **Etapa atual: B** (não iniciada; responsável a definir)
 
 Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê este arquivo para saber onde o projeto está e o atualiza ao terminar a etapa. Não apague registros de etapas anteriores.
 
@@ -8,7 +8,7 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 | Etapa | Tema | Responsável | Status | Branch | PR | Concluída em |
 |---|---|---|---|---|---|---|
-| A | Fundação + demografia (Tela 1) | Lucas Choucate | em andamento | `feature/etapa-a-fundacao` | | |
+| A | Fundação + demografia (Tela 1) | Lucas Choucate | concluída com pendências | `feature/etapa-a-fundacao` | aberto para `develop` | 2026-11-20 |
 | B | Renda, escolaridade, habitação (Tela 2) | [nome] | não iniciada | `feature/etapa-b-renda-habitacao` | | |
 | C | Infraestrutura urbana + mapa (Tela 3) | [nome] | não iniciada | `feature/etapa-c-mapa-urbano` | | |
 | D | Energia (Tela 4) | [nome] | não iniciada | `feature/etapa-d-energia` | | |
@@ -35,8 +35,8 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 ## Etapa A
 
 ### Critérios de aceite
-- [ ] Repositório no GitHub com `main`, `develop` e branch da etapa; integrantes adicionados como colaboradores (repositório e branches ok; confirmar a adição dos 4 colaboradores)
-- [ ] Issues criadas para as 5 etapas (passo humano pelo site, porque o `gh` não está instalado)
+- [x] Repositório no GitHub com `main`, `develop` e branch da etapa; integrantes adicionados como colaboradores (convites enviados; cada integrante precisa aceitar)
+- [ ] Issues criadas para as 5 etapas (adiado pelo responsável da etapa A; criar pelo site em Issues → New issue, uma por etapa, com link para `docs/etapas/ETAPA_X.md`)
 - [x] Estrutura de pastas conforme `docs/PADROES.md`
 - [x] Migrations `001_schema.sql` e `002_rls.sql` aplicadas no Supabase; RLS ativo com leitura pública (testado: a chave pública lê a view e não consegue inserir)
 - [x] Seed de territórios (com códigos IBGE reais dos bairros) e fontes aplicado
@@ -51,7 +51,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] Tela 1 funcional, responsiva, com fonte e ano visíveis e pelo menos 2 visualizações (3 visualizações)
 - [x] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro (42 testes)
 - [ ] CI no GitHub Actions rodando (o workflow só dispara em PR ou push para `develop`/`main`; confirmar no PR desta etapa)
-- [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (projeto criado com Root Directory `web` e variáveis públicas; a `main` só terá o site depois do merge `develop → main`)
+- [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (deploy de preview da branch da etapa A funcionando, com dados e rewrite testados; a produção na `main` depende do merge `develop → main`)
 - [ ] README com URL, como rodar e responsável da etapa A (falta a URL pública, que depende do deploy da `main`)
 - [x] Catálogo criado com os indicadores da etapa
 - [x] `docs/relatorio/01-perfil-demografico.md` escrito
@@ -81,7 +81,8 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
   - O `.gitattributes` força LF, porque a equipe usa sistemas diferentes e o Prettier exige LF.
   - As páginas são carregadas sob demanda (`React.lazy`) para manter o bundle inicial pequeno.
 - **Pendências / problemas conhecidos:**
-  - Adicionar os 4 colaboradores, criar as 5 Issues e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
+  - Revisor do PR da etapa A: o responsável da etapa B, ainda não definido. Quando for definido, adicioná-lo em Reviewers no PR.
+  - Criar as 5 Issues (adiado) e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
   - A URL pública só funciona depois do merge `develop → main`. Depois disso, preencher a URL aqui e no README.
   - O `V0006` (domicílios imputados) aparece como fração no arquivo (0,0231 etc.). Ele não foi carregado como indicador.
 - **O que a etapa B precisa saber:**
