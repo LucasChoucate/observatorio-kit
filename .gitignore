@@ -1,0 +1,32 @@
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+*.local
+
+# Node
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Dados brutos grandes (as URLs ficam em data/raw/README.md)
+data/raw/*
+!data/raw/README.md
+!data/raw/.gitkeep
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Vercel
+.vercel
