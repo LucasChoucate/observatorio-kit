@@ -178,5 +178,5 @@ class RelatorioQualidade:
             '',
         ]
         caminho = DIR_QUALIDADE / f'{self.script}.md'
-        caminho.write_text('\n'.join(linhas), encoding='utf-8')
+        caminho.write_text('\n'.join(linhas), encoding='utf-8', newline='\n')
         return caminho
