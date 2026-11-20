@@ -8,7 +8,7 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 | Etapa | Tema | Responsável | Status | Branch | PR | Concluída em |
 |---|---|---|---|---|---|---|
-| A | Fundação + demografia (Tela 1) | Lucas Choucate | concluída com pendências | `feature/etapa-a-fundacao` | aberto para `develop` | 2026-11-20 |
+| A | Fundação + demografia (Tela 1) | Lucas Choucate | concluída com pendências | `feature/etapa-a-fundacao` | [#1](https://github.com/LucasChoucate/observatorio-kit/pull/1) | 2026-11-20 |
 | B | Renda, escolaridade, habitação (Tela 2) | [nome] | não iniciada | `feature/etapa-b-renda-habitacao` | | |
 | C | Infraestrutura urbana + mapa (Tela 3) | [nome] | não iniciada | `feature/etapa-c-mapa-urbano` | | |
 | D | Energia (Tela 4) | [nome] | não iniciada | `feature/etapa-d-energia` | | |
@@ -50,12 +50,12 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] `utils/calculos.js` e `utils/formatar.js` com testes passando
 - [x] Tela 1 funcional, responsiva, com fonte e ano visíveis e pelo menos 2 visualizações (3 visualizações)
 - [x] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro (42 testes)
-- [ ] CI no GitHub Actions rodando (o workflow só dispara em PR ou push para `develop`/`main`; confirmar no PR desta etapa)
+- [x] CI no GitHub Actions rodando (verde no PR #1: `Frontend (lint, testes e build)` e `ETL (sintaxe Python)`)
 - [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (deploy de preview da branch da etapa A funcionando, com dados e rewrite testados; a produção na `main` depende do merge `develop → main`)
 - [ ] README com URL, como rodar e responsável da etapa A (falta a URL pública, que depende do deploy da `main`)
 - [x] Catálogo criado com os indicadores da etapa
 - [x] `docs/relatorio/01-perfil-demografico.md` escrito
-- [ ] PR aberto para `develop`
+- [x] PR aberto para `develop` (#1)
 
 ### Registro de passagem
 - **O que foi feito:**
