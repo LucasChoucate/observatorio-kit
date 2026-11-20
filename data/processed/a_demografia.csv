@@ -1,0 +1,28 @@
+codigo_ibge,territorio,indicador_codigo,fonte_sigla,ano,valor,nota,arquivo_origem,variaveis_origem
+2927408018,Beiru / Tancredo Neves,dem_populacao,IBGE_CENSO_2022,2022,38329.0,,Agregados_por_bairros_basico_BR.csv,V0001
+2927408117,Pernambués,dem_populacao,IBGE_CENSO_2022,2022,52564.0,,Agregados_por_bairros_basico_BR.csv,V0001
+2927408,Salvador,dem_populacao,IBGE_CENSO_2022,2022,2417678.0,,Agregados_por_municipios_basico_BR.csv,V0001
+2927408018,Beiru / Tancredo Neves,dem_domicilios,IBGE_CENSO_2022,2022,15458.0,,Agregados_por_bairros_basico_BR.csv,V0007
+2927408117,Pernambués,dem_domicilios,IBGE_CENSO_2022,2022,21568.0,,Agregados_por_bairros_basico_BR.csv,V0007
+2927408,Salvador,dem_domicilios,IBGE_CENSO_2022,2022,959423.0,,Agregados_por_municipios_basico_BR.csv,V0007
+2927408018,Beiru / Tancredo Neves,dem_moradores_por_domicilio,IBGE_CENSO_2022,2022,2.5,,Agregados_por_bairros_basico_BR.csv,V0005
+2927408117,Pernambués,dem_moradores_por_domicilio,IBGE_CENSO_2022,2022,2.4,,Agregados_por_bairros_basico_BR.csv,V0005
+2927408,Salvador,dem_moradores_por_domicilio,IBGE_CENSO_2022,2022,2.5,,Agregados_por_municipios_basico_BR.csv,V0005
+2927408018,Beiru / Tancredo Neves,dem_area_km2,IBGE_CENSO_2022,2022,1.6362,,Agregados_por_bairros_basico_BR.csv,AREA_KM2
+2927408117,Pernambués,dem_area_km2,IBGE_CENSO_2022,2022,3.2074,,Agregados_por_bairros_basico_BR.csv,AREA_KM2
+2927408,Salvador,dem_area_km2,IBGE_CENSO_2022,2022,693.4421,,Agregados_por_municipios_basico_BR.csv,AREA_KM2
+2927408018,Beiru / Tancredo Neves,dem_densidade_hab_km2,IBGE_CENSO_2022,2022,23425.5072,,Agregados_por_bairros_basico_BR.csv,"V0001, AREA_KM2"
+2927408117,Pernambués,dem_densidade_hab_km2,IBGE_CENSO_2022,2022,16388.4153,,Agregados_por_bairros_basico_BR.csv,"V0001, AREA_KM2"
+2927408,Salvador,dem_densidade_hab_km2,IBGE_CENSO_2022,2022,3486.4889,,Agregados_por_municipios_basico_BR.csv,"V0001, AREA_KM2"
+2927408018,Beiru / Tancredo Neves,dem_idade_0_14_pct,IBGE_CENSO_2022,2022,18.0079,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408117,Pernambués,dem_idade_0_14_pct,IBGE_CENSO_2022,2022,15.813,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408,Salvador,dem_idade_0_14_pct,IBGE_CENSO_2022,2022,16.7986,,Agregados_por_municipios_demografia_BR.csv,V01031 a V01041
+2927408018,Beiru / Tancredo Neves,dem_idade_15_59_pct,IBGE_CENSO_2022,2022,67.0059,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408117,Pernambués,dem_idade_15_59_pct,IBGE_CENSO_2022,2022,69.1503,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408,Salvador,dem_idade_15_59_pct,IBGE_CENSO_2022,2022,66.672,,Agregados_por_municipios_demografia_BR.csv,V01031 a V01041
+2927408018,Beiru / Tancredo Neves,dem_idade_60_mais_pct,IBGE_CENSO_2022,2022,14.9862,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408117,Pernambués,dem_idade_60_mais_pct,IBGE_CENSO_2022,2022,15.0367,,Agregados_por_bairros_demografia_BR.csv,V01031 a V01041
+2927408,Salvador,dem_idade_60_mais_pct,IBGE_CENSO_2022,2022,16.5294,,Agregados_por_municipios_demografia_BR.csv,V01031 a V01041
+2927408018,Beiru / Tancredo Neves,dem_mulheres_pct,IBGE_CENSO_2022,2022,54.2442,,Agregados_por_bairros_demografia_BR.csv,"V01008, V01006"
+2927408117,Pernambués,dem_mulheres_pct,IBGE_CENSO_2022,2022,53.9285,,Agregados_por_bairros_demografia_BR.csv,"V01008, V01006"
+2927408,Salvador,dem_mulheres_pct,IBGE_CENSO_2022,2022,54.4954,,Agregados_por_municipios_demografia_BR.csv,"V01008, V01006"
