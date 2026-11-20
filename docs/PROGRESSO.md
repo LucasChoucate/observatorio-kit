@@ -23,6 +23,11 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 
 | # | Tela | Visualização | Etapa |
 |---|---|---|---|
+| 1 | Tela 1 (Visão geral) | Barras agrupadas: população e domicílios ocupados por bairro | A |
+| 2 | Tela 1 (Visão geral) | Barras agrupadas: composição etária (0–14, 15–59, 60+) com Salvador como referência | A |
+| 3 | Tela 1 (Visão geral) | Barras: densidade demográfica dos bairros e de Salvador | A |
+
+---|---|---|---|
 | | | | |
 
 ---
@@ -30,35 +35,67 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 ## Etapa A
 
 ### Critérios de aceite
-- [ ] Repositório no GitHub com `main`, `develop` e branch da etapa; integrantes adicionados como colaboradores
-- [ ] Issues criadas para as 5 etapas
-- [ ] Estrutura de pastas conforme `docs/PADROES.md`
-- [ ] Migrations `001_schema.sql` e `002_rls.sql` aplicadas no Supabase; RLS ativo com leitura pública
-- [ ] Seed de territórios (com códigos IBGE reais dos bairros) e fontes aplicado
-- [ ] Equivalência Beiru/Tancredo Neves verificada e documentada no catálogo
-- [ ] Lista de arquivos do IBGE disponíveis por bairro registrada no registro de passagem
-- [ ] `etl/comum.py`, `etl/carregar.py` e `etl/a_demografia.py` funcionando e idempotentes
-- [ ] Pelo menos 3 indicadores demográficos reais no banco para os dois bairros
-- [ ] `docs/qualidade/a_demografia.md` gerado
-- [ ] App React + Vite em `web/` com Tailwind, rotas das 5 telas e componentes compartilhados
-- [ ] `services/observacoes.js` consultando o Supabase com a chave `anon`
-- [ ] `utils/calculos.js` e `utils/formatar.js` com testes passando
-- [ ] Tela 1 funcional, responsiva, com fonte e ano visíveis e pelo menos 2 visualizações
-- [ ] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro
-- [ ] CI no GitHub Actions rodando
-- [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite
-- [ ] README com URL, como rodar e responsável da etapa A
-- [ ] Catálogo criado com os indicadores da etapa
-- [ ] `docs/relatorio/01-perfil-demografico.md` escrito
+- [ ] Repositório no GitHub com `main`, `develop` e branch da etapa; integrantes adicionados como colaboradores (repositório e branches ok; confirmar a adição dos 4 colaboradores)
+- [ ] Issues criadas para as 5 etapas (passo humano pelo site, porque o `gh` não está instalado)
+- [x] Estrutura de pastas conforme `docs/PADROES.md`
+- [x] Migrations `001_schema.sql` e `002_rls.sql` aplicadas no Supabase; RLS ativo com leitura pública (testado: a chave pública lê a view e não consegue inserir)
+- [x] Seed de territórios (com códigos IBGE reais dos bairros) e fontes aplicado
+- [x] Equivalência Beiru/Tancredo Neves verificada e documentada no catálogo
+- [x] Lista de arquivos do IBGE disponíveis por bairro registrada no registro de passagem
+- [x] `etl/comum.py`, `etl/carregar.py` e `etl/a_demografia.py` funcionando e idempotentes (rodado 2 vezes: 9 indicadores e 27 observações nas duas)
+- [x] Pelo menos 3 indicadores demográficos reais no banco para os dois bairros (9 indicadores)
+- [x] `docs/qualidade/a_demografia.md` gerado
+- [x] App React + Vite em `web/` com Tailwind, rotas das 5 telas e componentes compartilhados
+- [x] `services/observacoes.js` consultando o Supabase com a chave `anon` (publishable)
+- [x] `utils/calculos.js` e `utils/formatar.js` com testes passando
+- [x] Tela 1 funcional, responsiva, com fonte e ano visíveis e pelo menos 2 visualizações (3 visualizações)
+- [x] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro (42 testes)
+- [ ] CI no GitHub Actions rodando (o workflow só dispara em PR ou push para `develop`/`main`; confirmar no PR desta etapa)
+- [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (projeto criado com Root Directory `web` e variáveis públicas; a `main` só terá o site depois do merge `develop → main`)
+- [ ] README com URL, como rodar e responsável da etapa A (falta a URL pública, que depende do deploy da `main`)
+- [x] Catálogo criado com os indicadores da etapa
+- [x] `docs/relatorio/01-perfil-demografico.md` escrito
 - [ ] PR aberto para `develop`
 
 ### Registro de passagem
 - **O que foi feito:**
-- **Arquivos do IBGE disponíveis por bairro (para B, C e D):**
+  - Repositório Git com `main`, `develop` e `feature/etapa-a-fundacao` em https://github.com/LucasChoucate/observatorio-kit.
+  - Supabase (região São Paulo): tabelas `territorios`, `fontes`, `indicadores`, `observacoes` e `analises`, além da view `vw_observacoes`; RLS com leitura pública e sem política de escrita (só a service_role grava). Seed com Brasil (1), Bahia (29), Salvador (2927408), Beiru/Tancredo Neves (2927408018) e Pernambués (2927408117), e com as fontes `IBGE_CENSO_2022`, `IPEA_IVS` e `EPE_ANUARIO`.
+  - ETL: `etl/comum.py` (leitura dos CSVs do IBGE, conversão, filtro com erro se faltar código, `percentual`, `razao`, `RelatorioQualidade`), `etl/carregar.py` (`conectar`, `buscar_territorio`, `buscar_fonte`, `garantir_indicador`, `upsert_observacoes` com o parâmetro `tipos_permitidos`, que impede gravar dado estadual em bairro) e `etl/a_demografia.py` (flag `--sem-carga` para rodar sem o `.env`).
+  - 9 indicadores × 3 territórios (2 bairros + Salvador) = 27 observações: `dem_populacao`, `dem_domicilios`, `dem_moradores_por_domicilio`, `dem_area_km2`, `dem_densidade_hab_km2`, `dem_idade_0_14_pct`, `dem_idade_15_59_pct`, `dem_idade_60_mais_pct` e `dem_mulheres_pct`.
+  - Frontend em `web/` (React 19, Vite 8, Tailwind 4, Recharts, React Router, Leaflet instalado), com páginas carregadas sob demanda. Componentes: `Layout`, `SeletorBairro` (exporta `AMBOS`), `CardIndicador` (aceita `referencia`), `SeloFonte` (aceita `escala` e `ano` para sobrescrever), `GraficoBarras` (barras agrupadas ou coloridas por item, com legenda, tooltip e tabela "Ver dados em tabela"), `EstadoCarregando`, `EstadoErro`, `EstadoVazio` e `EmConstrucao`. Hook `useConsulta(funcaoEstavel)`. Utilitários `calculos.js` (`diferencaAbsoluta`, `diferencaPercentual`, `saoComparaveis`, `motivoNaoComparavel`, `encontrarObservacao`, que devolve o ano mais recente), `formatar.js` e `series.js` (`montarDadosAgrupados`, `montarDadosPorTerritorio`).
+  - Cores fixas por território em `web/src/lib/cores.js` (paleta validada para daltonismo). Bairro novo ou série nova usam os próximos tons da `PALETA`.
+  - CI em `.github/workflows/ci.yml`: lint, format:check, test e build do frontend, mais a checagem de sintaxe do ETL.
+  - Vercel: projeto importado com Root Directory `web` e as variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (publishable). Production Branch: `main`.
+- **Arquivos do IBGE disponíveis por bairro (para B, C e D):** diretório `Agregados_por_Bairro_csv/` do FTP do Censo 2022 (lista completa e URLs em `data/raw/README.md`): `basico`, `demografia`, `alfabetizacao`, `caracteristicas_domicilio1`, `caracteristicas_domicilio2`, `caracteristicas_domicilio3`, `cor_ou_raca`, `parentesco`, `obitos`, `domicilios_indigenas`, `pessoas_indigenas`, `domicilios_quilombolas` e `pessoas_quilombolas`. Há equivalentes por município em `Agregados_por_Municipio_csv/`. O dicionário (`dicionario_de_dados_agregados_por_setores_censitarios_20261113.xlsx`) mostra que, nesses arquivos:
+  - **existem** abastecimento de água (rede geral), destino do esgoto, coleta de lixo e banheiros (temas Características do Domicílio, partes 2 e 3) e alfabetização;
+  - **não existem** rendimento/renda, energia elétrica nem características do entorno (iluminação, pavimentação, calçada, arborização). Nenhuma variável do dicionário contém esses termos. As etapas B, C e D precisam procurar em outras divulgações do Censo 2022 ou registrar a indisponibilidade no catálogo;
+  - o FTP também tem `malha_com_atributos/` (subpastas `bairros/` e `setores/`), útil para a etapa C.
 - **Decisões tomadas:**
+  - Beiru/Tancredo Neves é um único bairro no IBGE (código 2927408018) e é tratado como um território só, com o limite do IBGE.
+  - `dem_populacao` usa V0001 (arquivo básico, versão 2026-05-20). As faixas etárias usam o arquivo de demografia, com a **soma das 11 faixas** como denominador, porque no arquivo oficial essa soma fica um pouco abaixo de V01006 (diferença de 1, 6 e 558 pessoas, registrada no relatório de qualidade, sem correção).
+  - Faixas 0–14 / 15–59 / 60+, porque o arquivo não permite 65+ (registrado em "não disponíveis").
+  - `dem_moradores_por_domicilio` usa a média publicada pelo IBGE (V0005, observado) em vez de V0001 ÷ V0007, porque V0001 inclui moradores de domicílios coletivos.
+  - `dem_densidade_hab_km2` é calculada já nesta etapa com o AREA_KM2 oficial do IBGE (densidade bruta). A etapa C não precisa recalcular, só confirmar o polígono.
+  - Salvador vem do arquivo oficial por município (não da soma dos bairros) e aparece sempre como "Salvador (município)".
+  - O `.gitattributes` força LF, porque a equipe usa sistemas diferentes e o Prettier exige LF.
+  - As páginas são carregadas sob demanda (`React.lazy`) para manter o bundle inicial pequeno.
 - **Pendências / problemas conhecidos:**
+  - Adicionar os 4 colaboradores, criar as 5 Issues e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
+  - A URL pública só funciona depois do merge `develop → main`. Depois disso, preencher a URL aqui e no README.
+  - O `V0006` (domicílios imputados) aparece como fração no arquivo (0,0231 etc.). Ele não foi carregado como indicador.
 - **O que a etapa B precisa saber:**
+  - Peça ao Lucas as chaves por mensagem privada e crie `etl/.env` e `web/.env.local` a partir dos `.env.example`.
+  - Reutilize `ler_csv_ibge`, `converter_colunas`, `filtrar_codigos`, `percentual` e `RelatorioQualidade` de `etl/comum.py`, e `garantir_indicador`/`upsert_observacoes` de `etl/carregar.py`. Copie a estrutura de `etl/a_demografia.py` (lista `INDICADORES` com metodologia e limitações, `--sem-carga`).
+  - As constantes `BAIRROS` e `CODIGO_SALVADOR` estão em `etl/comum.py`. Os códigos usados no frontend estão em `web/src/lib/territorios.js`.
+  - Na Tela 1 há comentários `ETAPA B` em `web/src/pages/VisaoGeral.jsx`, dentro de `SecaoBairro`, que é onde entram os cards de rendimento e saneamento. Basta acrescentar os códigos dos novos indicadores e reutilizar `CardIndicador`.
+  - Para a Tela 2, use `saoComparaveis`/`motivoNaoComparavel` e `diferencaAbsoluta`/`diferencaPercentual` (base = segundo argumento), além de `montarDadosAgrupados` e `GraficoBarras`. Em indicadores em %, a diferença absoluta é em pontos percentuais.
+  - Rendimento não existe nos agregados por bairro (ver acima). Confirme em outras divulgações antes de registrar a indisponibilidade.
 - **Como testar:**
+  1. `cd web && npm install && npm run lint && npm test && npm run build` (42 testes).
+  2. `npm run dev` e abrir http://localhost:5173: a Tela 1 mostra cards e 3 gráficos; o seletor alterna entre um bairro e os dois; F12 no modo celular não deve ter rolagem horizontal.
+  3. ETL: com `etl/.env` preenchido, `python etl/a_demografia.py` duas vezes. A tabela `observacoes` continua com 27 linhas.
+  4. Sem o `.env`: `python etl/a_demografia.py --sem-carga` gera `data/processed/a_demografia.csv` e `docs/qualidade/a_demografia.md` aprovados.
 
 ---
 
