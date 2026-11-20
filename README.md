@@ -70,7 +70,7 @@ Outros comandos: `npm run lint`, `npm run format`, `npm test` e `npm run build`.
 
 ```bash
 python -m venv etl/.venv
-# Windows: etl.venvScriptsctivate    Linux/macOS: source etl/.venv/bin/activate
+# Windows: etl\.venv\Scripts\activate    Linux/macOS: source etl/.venv/bin/activate
 pip install -r etl/requirements.txt
 cp etl/.env.example etl/.env    # preencha SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (nunca no frontend)
 ```
