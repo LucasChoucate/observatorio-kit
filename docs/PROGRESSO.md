@@ -92,6 +92,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
   - Na Tela 1 há comentários `ETAPA B` em `web/src/pages/VisaoGeral.jsx`, dentro de `SecaoBairro`, que é onde entram os cards de rendimento e saneamento. Basta acrescentar os códigos dos novos indicadores e reutilizar `CardIndicador`.
   - Para a Tela 2, use `saoComparaveis`/`motivoNaoComparavel` e `diferencaAbsoluta`/`diferencaPercentual` (base = segundo argumento), além de `montarDadosAgrupados` e `GraficoBarras`. Em indicadores em %, a diferença absoluta é em pontos percentuais.
   - Rendimento não existe nos agregados por bairro (ver acima). Confirme em outras divulgações antes de registrar a indisponibilidade.
+  - Ao instalar pacotes npm no Windows, confira se o CI vai aceitar o lockfile com `npm ci --os=linux --cpu=x64 --dry-run` dentro de `web/`. Se acusar "Missing ... from lock file", apague `node_modules` e `package-lock.json` e rode `npm install` de novo (bug do npm com dependências opcionais de outras plataformas).
 - **Como testar:**
   1. `cd web && npm install && npm run lint && npm test && npm run build` (42 testes).
   2. `npm run dev` e abrir http://localhost:5173: a Tela 1 mostra cards e 3 gráficos; o seletor alterna entre um bairro e os dois; F12 no modo celular não deve ter rolagem horizontal.
