@@ -10,7 +10,7 @@ Projeto integrador da UC Desenvolvimento Fullstack, SENAI CIMATEC, Prof. Celso B
 
 | Etapa | Integrante | GitHub | Responsabilidade |
 |---|---|---|---|
-| A | Lucas Choucate | [@usuario] | Fundação do projeto (repositório, Supabase, React, Vercel), dados demográficos, Tela 1 |
+| A | Lucas Choucate | [@LucasChoucate](https://github.com/LucasChoucate) | Fundação do projeto (repositório, Supabase, React, Vercel), dados demográficos, Tela 1 |
 | B | [nome] | [@usuario] | Renda, escolaridade e habitação, Tela 2 (comparativo) |
 | C | [nome] | [@usuario] | Infraestrutura urbana, malha territorial, Tela 3 (mapa) |
 | D | [nome] | [@usuario] | Dados energéticos (EPE), proxies socioenergéticos, Tela 4 |

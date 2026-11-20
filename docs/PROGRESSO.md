@@ -1,6 +1,6 @@
 # Progresso do projeto
 
-> **Etapa atual: A** (não iniciada)
+> **Etapa atual: A** (em andamento)
 
 Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê este arquivo para saber onde o projeto está e o atualiza ao terminar a etapa. Não apague registros de etapas anteriores.
 
@@ -8,7 +8,7 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 | Etapa | Tema | Responsável | Status | Branch | PR | Concluída em |
 |---|---|---|---|---|---|---|
-| A | Fundação + demografia (Tela 1) | [nome] | não iniciada | `feature/etapa-a-fundacao` | | |
+| A | Fundação + demografia (Tela 1) | Lucas Choucate | em andamento | `feature/etapa-a-fundacao` | | |
 | B | Renda, escolaridade, habitação (Tela 2) | [nome] | não iniciada | `feature/etapa-b-renda-habitacao` | | |
 | C | Infraestrutura urbana + mapa (Tela 3) | [nome] | não iniciada | `feature/etapa-c-mapa-urbano` | | |
 | D | Energia (Tela 4) | [nome] | não iniciada | `feature/etapa-d-energia` | | |
@@ -17,7 +17,7 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída com pendências`.
 
 **URL pública (Vercel):** [preencher na etapa A]
-**Repositório:** [preencher na etapa A]
+**Repositório:** https://github.com/LucasChoucate/observatorio-kit
 
 ## Visualizações funcionais (meta: 6 ou mais)
 
