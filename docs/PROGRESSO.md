@@ -16,7 +16,7 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída com pendências`.
 
-**URL pública (Vercel):** [preencher na etapa A]
+**URL pública (Vercel):** https://observatorio-kit.vercel.app
 **Repositório:** https://github.com/LucasChoucate/observatorio-kit
 
 ## Visualizações funcionais (meta: 6 ou mais)
@@ -52,7 +52,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro (42 testes)
 - [x] CI no GitHub Actions rodando (verde no PR #1: `Frontend (lint, testes e build)` e `ETL (sintaxe Python)`)
 - [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (deploy de preview da branch da etapa A funcionando, com dados e rewrite testados; a produção na `main` depende do merge `develop → main`)
-- [ ] README com URL, como rodar e responsável da etapa A (falta a URL pública, que depende do deploy da `main`)
+- [x] README com URL, como rodar e responsável da etapa A (https://observatorio-kit.vercel.app)
 - [x] Catálogo criado com os indicadores da etapa
 - [x] `docs/relatorio/01-perfil-demografico.md` escrito
 - [x] PR aberto para `develop` (#1)
@@ -83,7 +83,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - **Pendências / problemas conhecidos:**
   - Revisora do PR da etapa A: Yasmin Queiroz (@yasminqjs), responsável da etapa B.
   - Criar as 5 Issues (adiado) e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
-  - A URL pública só funciona depois do merge `develop → main`. Depois disso, preencher a URL aqui e no README.
+  - A URL pública (https://observatorio-kit.vercel.app) já está registrada, mas só mostra o site depois do merge `develop → main`. Até lá, ela responde 404.
   - O `V0006` (domicílios imputados) aparece como fração no arquivo (0,0231 etc.). Ele não foi carregado como indicador.
 - **O que a etapa B precisa saber:**
   - Peça ao Lucas as chaves por mensagem privada e crie `etl/.env` e `web/.env.local` a partir dos `.env.example`.

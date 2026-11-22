@@ -4,7 +4,7 @@ Aplicação web que integra dados públicos do IBGE (Censo 2022), do IPEA (Atlas
 
 Projeto integrador da UC Desenvolvimento Fullstack, SENAI CIMATEC, Prof. Celso Barreto (AV3).
 
-**Aplicação publicada:** [preencher após o primeiro deploy na Vercel]
+**Aplicação publicada:** https://observatorio-kit.vercel.app
 
 ## Equipe
 
