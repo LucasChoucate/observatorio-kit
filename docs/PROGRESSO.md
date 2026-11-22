@@ -1,6 +1,6 @@
 # Progresso do projeto
 
-> **Etapa atual: B** (não iniciada; responsável a definir)
+> **Etapa atual: B** (não iniciada; responsável: Yasmin Queiroz)
 
 Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê este arquivo para saber onde o projeto está e o atualiza ao terminar a etapa. Não apague registros de etapas anteriores.
 
@@ -8,11 +8,11 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 | Etapa | Tema | Responsável | Status | Branch | PR | Concluída em |
 |---|---|---|---|---|---|---|
-| A | Fundação + demografia (Tela 1) | Lucas Choucate | concluída com pendências | `feature/etapa-a-fundacao` | [#1](https://github.com/LucasChoucate/observatorio-kit/pull/1) | 2026-11-20 |
-| B | Renda, escolaridade, habitação (Tela 2) | [nome] | não iniciada | `feature/etapa-b-renda-habitacao` | | |
-| C | Infraestrutura urbana + mapa (Tela 3) | [nome] | não iniciada | `feature/etapa-c-mapa-urbano` | | |
-| D | Energia (Tela 4) | [nome] | não iniciada | `feature/etapa-d-energia` | | |
-| E | IPEA, metodologia, IEVS, fechamento (Tela 5) | [nome] | não iniciada | `feature/etapa-e-metodologia-final` | | |
+| A | Fundação + demografia (Tela 1) | Lucas Choucate (@LucasChoucate) | concluída com pendências | `feature/etapa-a-fundacao` | [#1](https://github.com/LucasChoucate/observatorio-kit/pull/1) | 2026-11-20 |
+| B | Renda, escolaridade, habitação (Tela 2) | Yasmin Queiroz (@yasminqjs) | não iniciada | `feature/etapa-b-renda-habitacao` | | |
+| C | Infraestrutura urbana + mapa (Tela 3) | Ramon Papes (@RamonPapes) | não iniciada | `feature/etapa-c-mapa-urbano` | | |
+| D | Energia (Tela 4) | Rafael Cezimbra (@rafacezimbra) | não iniciada | `feature/etapa-d-energia` | | |
+| E | IPEA, metodologia, IEVS, fechamento (Tela 5) | Icaro Yan (@icaro-cimatec) | não iniciada | `feature/etapa-e-metodologia-final` | | |
 
 Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída com pendências`.
 
@@ -81,7 +81,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
   - O `.gitattributes` força LF, porque a equipe usa sistemas diferentes e o Prettier exige LF.
   - As páginas são carregadas sob demanda (`React.lazy`) para manter o bundle inicial pequeno.
 - **Pendências / problemas conhecidos:**
-  - Revisor do PR da etapa A: o responsável da etapa B, ainda não definido. Quando for definido, adicioná-lo em Reviewers no PR.
+  - Revisora do PR da etapa A: Yasmin Queiroz (@yasminqjs), responsável da etapa B.
   - Criar as 5 Issues (adiado) e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
   - A URL pública só funciona depois do merge `develop → main`. Depois disso, preencher a URL aqui e no README.
   - O `V0006` (domicílios imputados) aparece como fração no arquivo (0,0231 etc.). Ele não foi carregado como indicador.
