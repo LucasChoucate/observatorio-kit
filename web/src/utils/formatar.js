@@ -28,6 +28,19 @@ export function formatarDiferencaPercentual(valor, casas = 1) {
   return `${sinal}${formatarPercentual(Math.abs(numero), casas)}`;
 }
 
+/** Diferença absoluta formatada com sinal (+ / −) e sufixo de pontos percentuais para %. */
+export function formatarDiferencaAbsoluta(valor, unidade, casas) {
+  const numero = paraNumero(valor);
+  if (numero === null) return VAZIO;
+  const sinal = numero > 0 ? '+' : numero < 0 ? '−' : '';
+  const casasDecimais = casas ?? (unidade === '%' ? 1 : (CASAS_POR_UNIDADE[unidade] ?? 0));
+  const formatado = formatarNumero(Math.abs(numero), casasDecimais);
+  if (unidade === '%') {
+    return `${sinal}${formatado} p.p.`;
+  }
+  return `${sinal}${formatado}`;
+}
+
 const CASAS_POR_UNIDADE = {
   '%': 1,
   pessoas: 0,

@@ -112,12 +112,12 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] Taxa de alfabetização por bairro (15 anos ou mais, Censo 2022)
 - [x] Indicadores de água, esgoto e lixo por bairro (características do domicílio 2, Censo 2022)
 - [x] `docs/qualidade/b_renda_habitacao.md` gerado
-- [ ] Tela 2 com filtros por dimensão e indicador
-- [ ] Tela 2 com gráfico de barras e tabela com diferenças absolutas e percentuais
-- [ ] Diferenças só exibidas quando comparáveis
-- [ ] Pelo menos 2 visualizações na Tela 2
-- [ ] Cards de rendimento e saneamento acrescentados à Tela 1
-- [ ] Testes novos passando; `lint`, `test` e `build` sem erro
+- [x] Tela 2 com filtros por dimensão e indicador (dimensões demográfica, social, habitacional e econômica)
+- [x] Tela 2 com gráfico de barras e tabela com diferenças absolutas e percentuais (Pernambués como base)
+- [x] Diferenças só exibidas quando comparáveis (validadas com `saoComparaveis()` e `motivoNaoComparavel()`)
+- [x] Pelo menos 2 visualizações na Tela 2 (gráfico de indicador destacado e panorama comparativo de taxas)
+- [x] Cards de rendimento e saneamento acrescentados à Tela 1 (saneamento, alfabetização e alerta metodológico de renda)
+- [x] Testes novos passando; `lint`, `test` e `build` sem erro (51 testes no Vitest)
 - [x] Catálogo atualizado (incluindo não disponíveis)
 - [x] `docs/relatorio/02-rendimento.md` e `03-condicoes-habitacionais.md` escritos
 - [ ] PR aberto para `develop`

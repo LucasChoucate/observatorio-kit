@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   formatarCompacto,
   formatarData,
+  formatarDiferencaAbsoluta,
   formatarDiferencaPercentual,
   formatarNumero,
   formatarPercentual,
@@ -44,6 +45,23 @@ describe('formatarDiferencaPercentual', () => {
 
   it('mostra traço quando não é comparável', () => {
     expect(formatarDiferencaPercentual(null)).toBe(VAZIO);
+  });
+});
+
+describe('formatarDiferencaAbsoluta', () => {
+  it('inclui o sinal e sufixo p.p. para percentuais', () => {
+    expect(formatarDiferencaAbsoluta(1.72, '%')).toBe('+1,7 p.p.');
+    expect(formatarDiferencaAbsoluta(-0.58, '%')).toBe('−0,6 p.p.');
+    expect(formatarDiferencaAbsoluta(0, '%')).toBe('0,0 p.p.');
+  });
+
+  it('formata contagens absolutas sem p.p.', () => {
+    expect(formatarDiferencaAbsoluta(14235, 'pessoas')).toBe('+14.235');
+    expect(formatarDiferencaAbsoluta(-6110, 'domicílios')).toBe('−6.110');
+  });
+
+  it('mostra traço quando valor é nulo', () => {
+    expect(formatarDiferencaAbsoluta(null, '%')).toBe(VAZIO);
   });
 });
 
