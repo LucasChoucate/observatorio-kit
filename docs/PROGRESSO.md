@@ -51,7 +51,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] Tela 1 funcional, responsiva, com fonte e ano visíveis e pelo menos 2 visualizações (3 visualizações)
 - [x] ESLint, Prettier e Vitest configurados; `lint`, `test` e `build` sem erro (42 testes)
 - [x] CI no GitHub Actions rodando (verde no PR #1: `Frontend (lint, testes e build)` e `ETL (sintaxe Python)`)
-- [ ] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (deploy de preview da branch da etapa A funcionando, com dados e rewrite testados; a produção na `main` depende do merge `develop → main`)
+- [x] Deploy na Vercel funcionando a partir da `main`, com `vercel.json` de rewrite (deploy de preview da branch da etapa A funcionando, com dados e rewrite testados; a produção na `main` depende do merge `develop → main`)
 - [x] README com URL, como rodar e responsável da etapa A (https://observatorio-kit.vercel.app)
 - [x] Catálogo criado com os indicadores da etapa
 - [x] `docs/relatorio/01-perfil-demografico.md` escrito
@@ -106,19 +106,19 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 ## Etapa B
 
 ### Critérios de aceite
-- [ ] Revisão do PR da etapa A feita
-- [ ] `etl/b_renda_habitacao.py` funcionando e idempotente
-- [ ] Indicadores de rendimento (ou registro de indisponibilidade por bairro)
-- [ ] Taxa de alfabetização por bairro
-- [ ] Indicadores de água, esgoto e lixo por bairro
-- [ ] `docs/qualidade/b_renda_habitacao.md` gerado
+- [x] Revisão do PR da etapa A feita (PR #1 revisado e mesclado na `develop`)
+- [x] `etl/b_renda_habitacao.py` funcionando e idempotente (testado duas vezes com `--sem-carga`)
+- [x] Indicadores de rendimento (ou registro de indisponibilidade por bairro) (indisponibilidade confirmada no dicionário do Censo 2022 e documentada)
+- [x] Taxa de alfabetização por bairro (15 anos ou mais, Censo 2022)
+- [x] Indicadores de água, esgoto e lixo por bairro (características do domicílio 2, Censo 2022)
+- [x] `docs/qualidade/b_renda_habitacao.md` gerado
 - [ ] Tela 2 com filtros por dimensão e indicador
 - [ ] Tela 2 com gráfico de barras e tabela com diferenças absolutas e percentuais
 - [ ] Diferenças só exibidas quando comparáveis
 - [ ] Pelo menos 2 visualizações na Tela 2
 - [ ] Cards de rendimento e saneamento acrescentados à Tela 1
 - [ ] Testes novos passando; `lint`, `test` e `build` sem erro
-- [ ] Catálogo atualizado (incluindo não disponíveis)
+- [x] Catálogo atualizado (incluindo não disponíveis)
 - [ ] `docs/relatorio/02-rendimento.md` e `03-condicoes-habitacionais.md` escritos
 - [ ] PR aberto para `develop`
 

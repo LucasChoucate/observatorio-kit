@@ -20,15 +20,22 @@ nova, o nome muda: confira o diretório e atualize esta tabela e o script.
 | `Agregados_por_municipios_demografia_BR.zip` → `Agregados_por_municipios_demografia_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Municipio_csv/Agregados_por_municipios_demografia_BR.zip) | 2026-11-20 | `etl/a_demografia.py` (Salvador) |
 | `dicionario_de_dados_agregados_por_setores_censitarios_20261113.xlsx` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/dicionario_de_dados_agregados_por_setores_censitarios_20261113.xlsx) | 2026-11-20 | consulta (significado das variáveis) |
 
+## Etapa B (renda, escolaridade e habitação)
+
+| Arquivo | URL | Acesso | Usado por |
+|---|---|---|---|
+| `Agregados_por_bairros_alfabetizacao_BR.zip` → `Agregados_por_bairros_alfabetizacao_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Bairro_csv/Agregados_por_bairros_alfabetizacao_BR.zip) | 2026-11-22 | `etl/b_renda_habitacao.py` |
+| `Agregados_por_municipios_alfabetizacao_BR.zip` → `Agregados_por_municipios_alfabetizacao_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Municipio_csv/Agregados_por_municipios_alfabetizacao_BR.zip) | 2026-11-22 | `etl/b_renda_habitacao.py` (Salvador) |
+| `Agregados_por_bairros_caracteristicas_domicilio2_BR_20250417.zip` → `Agregados_por_bairros_caracteristicas_domicilio2_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Bairro_csv/Agregados_por_bairros_caracteristicas_domicilio2_BR_20250417.zip) | 2026-11-22 | `etl/b_renda_habitacao.py` |
+| `Agregados_por_municipios_caracteristicas_domicilio2_BR_20250417.zip` → `Agregados_por_municipios_caracteristicas_domicilio2_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Municipio_csv/Agregados_por_municipios_caracteristicas_domicilio2_BR_20250417.zip) | 2026-11-22 | `etl/b_renda_habitacao.py` (Salvador) |
+
 Formato dos CSVs: separador `;`, encoding `latin-1`, decimal com vírgula, valores entre aspas.
 
-## Outros arquivos por bairro disponíveis (para as etapas B, C e D)
+## Outros arquivos por bairro disponíveis (para as etapas C e D)
 
 Mesmo diretório `Agregados_por_Bairro_csv/` (há equivalentes por município em `Agregados_por_Municipio_csv/`):
 
-- `Agregados_por_bairros_alfabetizacao_BR.zip`
 - `Agregados_por_bairros_caracteristicas_domicilio1_BR_20261021.zip`
-- `Agregados_por_bairros_caracteristicas_domicilio2_BR_20250417.zip`
 - `Agregados_por_bairros_caracteristicas_domicilio3_BR_20250417.zip`
 - `Agregados_por_bairros_cor_ou_raca_BR.zip`
 - `Agregados_por_bairros_parentesco_BR.zip`
