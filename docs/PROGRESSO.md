@@ -36,7 +36,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 
 ### Critérios de aceite
 - [x] Repositório no GitHub com `main`, `develop` e branch da etapa; integrantes adicionados como colaboradores (convites enviados; cada integrante precisa aceitar)
-- [ ] Issues criadas para as 5 etapas (adiado pelo responsável da etapa A; criar pelo site em Issues → New issue, uma por etapa, com link para `docs/etapas/ETAPA_X.md`)
+- [x] Issues criadas para as 5 etapas (#2 A, #3 B, #4 C, #5 D, #6 E)
 - [x] Estrutura de pastas conforme `docs/PADROES.md`
 - [x] Migrations `001_schema.sql` e `002_rls.sql` aplicadas no Supabase; RLS ativo com leitura pública (testado: a chave pública lê a view e não consegue inserir)
 - [x] Seed de territórios (com códigos IBGE reais dos bairros) e fontes aplicado
@@ -83,7 +83,8 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
   - Publicação na `main` (combinado com a equipe e registrado em `docs/PADROES.md` seção 4): a etapa A publica logo após o merge; nas etapas B, C e D o PR `develop → main` é opcional; a etapa E faz a publicação final com a tag `v1.0.0`.
 - **Pendências / problemas conhecidos:**
   - Revisora do PR da etapa A: Yasmin Queiroz (@yasminqjs), responsável da etapa B.
-  - Criar as 5 Issues (adiado) e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
+  - Atribuir as Issues #5 (D) e #6 (E) a Rafael e Icaro depois que aceitarem o convite de colaborador. A Issue #2 fecha com `Closes #2` no PR `develop → main`.
+  - (Opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
   - A URL pública (https://observatorio-kit.vercel.app) já está registrada, mas só mostra o site depois do merge `develop → main`. Até lá, ela responde 404.
   - O `V0006` (domicílios imputados) aparece como fração no arquivo (0,0231 etc.). Ele não foi carregado como indicador.
 - **O que a etapa B precisa saber:**
