@@ -81,7 +81,10 @@ docs(progresso): conclui etapa B
 - Título no padrão de commit. Corpo segue `.github/pull_request_template.md`.
 - **Revisor: o responsável pela próxima etapa.** Assim quem continua já conhece o que recebeu.
 - Merge com **"Create a merge commit"** (não usar squash), para preservar os commits individuais de cada integrante no histórico.
-- Depois do merge na `develop`, abrir PR `develop → main` para atualizar a Vercel.
+- Publicação na `main` (Vercel), conforme combinado pela equipe:
+  - etapa A: PR `develop → main` logo depois do merge na `develop` (primeiro deploy de produção);
+  - etapas B, C e D: só o PR para a `develop`; o PR `develop → main` é opcional e pode juntar mais de uma etapa;
+  - etapa E: PR `develop → main` final, com a tag `v1.0.0` e a Release.
 
 ## 5. Código JavaScript / React
 
