@@ -16,6 +16,7 @@ import {
   saoComparaveis,
 } from '../utils/calculos';
 import {
+  formatarCompacto,
   formatarDiferencaAbsoluta,
   formatarDiferencaPercentual,
   formatarNumero,
@@ -32,6 +33,19 @@ const DIMENSOES = [
   { valor: 'habitacional', rotulo: 'Habitacional' },
   { valor: 'economica', rotulo: 'Econômica' },
 ];
+
+const ROTULOS_COMPACTOS = {
+  dem_idade_0_14_pct: '0 a 14 anos',
+  dem_idade_15_59_pct: '15 a 59 anos',
+  dem_idade_60_mais_pct: '60+ anos',
+  dem_mulheres_pct: 'Mulheres',
+  soc_taxa_alfabetizacao_pct: 'Alfabetização',
+  hab_agua_rede_geral_pct: 'Água (rede)',
+  hab_esgoto_adequado_pct: 'Esgoto adequado',
+  hab_lixo_coletado_pct: 'Lixo coletado',
+  hab_lixo_cacamba_pct: 'Lixo caçamba',
+  hab_sem_banheiro_exclusivo_pct: 'Sem banheiro',
+};
 
 const ANALISES_DIMENSAO = {
   todas: {
@@ -133,7 +147,7 @@ export default function Comparativo() {
       const indSelecionadoObj =
         indicadorFiltro !== 'todos'
           ? indFiltrados.find((i) => i.codigo === indicadorFiltro)
-          : indFiltrados[0];
+          : indFiltrados.find((i) => i.codigo === 'dem_populacao') || indFiltrados[0];
 
       if (indSelecionadoObj) {
         const obsB = encontrarObservacao(observacoes, indSelecionadoObj.codigo, CODIGO_BEIRU);
@@ -182,7 +196,8 @@ export default function Comparativo() {
           const obsS = encontrarObservacao(observacoes, ind.codigo, CODIGO_SALVADOR);
 
           return {
-            rotulo: ind.nome.replace(/\s*\(.*?\)\s*/g, ''), // nome resumido
+            rotulo: ROTULOS_COMPACTOS[ind.codigo] || ind.nome.replace(/\s*\(.*?\)\s*/g, ''),
+            nomeCompleto: ind.nome,
             beiru: obsB ? Number(obsB.valor) : null,
             pernambues: obsP ? Number(obsP.valor) : null,
             salvador: obsS ? Number(obsS.valor) : null,
@@ -312,7 +327,10 @@ export default function Comparativo() {
       )}
 
       {/* Seção de Visualizações (mínimo de 2 visualizações) */}
-      <section aria-label="Visualizações gráficas" className="grid gap-6 lg:grid-cols-2">
+      <section
+        aria-label="Visualizações gráficas"
+        className={`grid gap-6 ${dadosGraficoTaxas?.dados?.length > 5 ? 'lg:grid-cols-1' : 'lg:grid-cols-2'}`}
+      >
         {/* Visualização 1: Gráfico do indicador selecionado */}
         {dadosGraficoDestaque && dadosGraficoDestaque.dados.length > 0 && (
           <GraficoBarras
@@ -321,11 +339,14 @@ export default function Comparativo() {
             dados={dadosGraficoDestaque.dados}
             series={[{ chave: 'valor', nome: dadosGraficoDestaque.indicador.nome }]}
             formatarValor={(v) => formatarValor(v, dadosGraficoDestaque.indicador.unidade)}
-            formatarEixo={(v) =>
-              dadosGraficoDestaque.indicador.unidade === '%'
-                ? `${formatarNumero(v)}%`
-                : formatarNumero(v)
-            }
+            formatarEixo={(v) => {
+              const unidade = dadosGraficoDestaque.indicador.unidade;
+              if (unidade === '%') return `${formatarNumero(v)}%`;
+              if (unidade === 'km²' || unidade === 'moradores/domicílio') {
+                return formatarNumero(v, 1);
+              }
+              return formatarCompacto(v);
+            }}
             rodape={
               dadosGraficoDestaque.observacaoRef && (
                 <SeloFonte observacao={dadosGraficoDestaque.observacaoRef} />
@@ -341,6 +362,8 @@ export default function Comparativo() {
             descricao="Comparação das proporções percentuais entre Beiru/Tancredo Neves, Pernambués e Salvador."
             dados={dadosGraficoTaxas.dados}
             series={dadosGraficoTaxas.series}
+            altura={340}
+            rotacionarRotulos={dadosGraficoTaxas.dados.length > 3}
             formatarValor={(v) => formatarPercentual(v)}
             formatarEixo={(v) => `${formatarNumero(v)}%`}
             rodape={

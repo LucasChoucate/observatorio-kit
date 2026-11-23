@@ -66,11 +66,15 @@ export default function GraficoBarras({
   formatarValor = (v) => formatarNumero(v),
   formatarEixo = formatarCompacto,
   rodape,
-  altura = 280,
+  altura,
+  rotacionarRotulos,
 }) {
+  const rotacionar = rotacionarRotulos ?? dados.length > 3;
+  const alturaGrafico = altura ?? (rotacionar ? 340 : 280);
   const corPorItem = series.length === 1 && dados.some((linha) => linha.cor);
+
   return (
-    <figure className="flex flex-col gap-3 rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
+    <figure className="flex flex-col gap-3 rounded-xl border border-stone-200 bg-white p-4 shadow-sm min-w-0 overflow-hidden">
       <figcaption>
         <h3 className="font-semibold text-stone-900">{titulo}</h3>
         {descricao && <p className="mt-0.5 text-sm text-stone-600">{descricao}</p>}
@@ -87,16 +91,26 @@ export default function GraficoBarras({
         </ul>
       )}
 
-      <div style={{ height: altura }} className="w-full">
+      <div style={{ height: alturaGrafico }} className="w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={dados} margin={{ top: 8, right: 8, bottom: 0, left: 0 }} barGap={2}>
+          <BarChart
+            data={dados}
+            margin={{ top: 8, right: 12, bottom: rotacionar ? 16 : 4, left: 0 }}
+            barGap={2}
+          >
             <CartesianGrid vertical={false} stroke={COR_GRADE} />
             <XAxis
               dataKey="rotulo"
               tickLine={false}
               axisLine={{ stroke: COR_GRADE }}
               interval={0}
-              tick={{ fill: COR_TEXTO_EIXO, fontSize: 12 }}
+              angle={rotacionar ? -35 : 0}
+              textAnchor={rotacionar ? 'end' : 'middle'}
+              height={rotacionar ? 65 : 30}
+              tick={{ fill: COR_TEXTO_EIXO, fontSize: rotacionar ? 11 : 12 }}
+              tickFormatter={(v) =>
+                typeof v === 'string' && v.length > 22 ? `${v.slice(0, 20)}…` : v
+              }
             />
             <YAxis
               tickFormatter={formatarEixo}

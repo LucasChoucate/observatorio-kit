@@ -54,12 +54,14 @@ function primeiraObservacao(observacoes, codigos) {
   return observacoes.find((obs) => codigos.includes(obs.indicador_codigo)) ?? null;
 }
 
-function SecaoBairro({ bairro, observacoes }) {
+function SecaoBairro({ bairro, observacoes, duasColunas }) {
   const cardsSaneamento = CARDS_SOCIAIS_HABITACIONAIS.map((codigo) => ({
     codigo,
     obs: encontrarObservacao(observacoes, codigo, bairro.codigo_ibge),
     ref: encontrarObservacao(observacoes, codigo, CODIGO_SALVADOR),
   })).filter((item) => item.obs != null);
+
+  const gridCards = `grid gap-3 sm:grid-cols-2 ${duasColunas ? '2xl:grid-cols-3' : 'lg:grid-cols-3'}`;
 
   return (
     <section aria-labelledby={`bairro-${bairro.codigo_ibge}`} className="space-y-4">
@@ -74,7 +76,7 @@ function SecaoBairro({ bairro, observacoes }) {
         />
         {bairro.nome}
       </h2>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={gridCards}>
         {CARDS_DEMOGRAFICOS.map((codigo) => (
           <CardIndicador
             key={codigo}
@@ -91,7 +93,7 @@ function SecaoBairro({ bairro, observacoes }) {
           <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-500">
             Educação e saneamento básico (Censo 2022)
           </h3>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className={gridCards}>
             {cardsSaneamento.map(({ codigo, obs, ref }) => (
               <CardIndicador
                 key={codigo}
@@ -173,7 +175,12 @@ export default function VisaoGeral() {
 
         <div className={`grid gap-8 ${selecionados.length > 1 ? 'xl:grid-cols-2' : ''}`}>
           {selecionados.map((bairro) => (
-            <SecaoBairro key={bairro.codigo_ibge} bairro={bairro} observacoes={observacoes} />
+            <SecaoBairro
+              key={bairro.codigo_ibge}
+              bairro={bairro}
+              observacoes={observacoes}
+              duasColunas={selecionados.length > 1}
+            />
           ))}
         </div>
 
