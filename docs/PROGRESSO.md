@@ -119,7 +119,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [ ] Cards de rendimento e saneamento acrescentados à Tela 1
 - [ ] Testes novos passando; `lint`, `test` e `build` sem erro
 - [x] Catálogo atualizado (incluindo não disponíveis)
-- [ ] `docs/relatorio/02-rendimento.md` e `03-condicoes-habitacionais.md` escritos
+- [x] `docs/relatorio/02-rendimento.md` e `03-condicoes-habitacionais.md` escritos
 - [ ] PR aberto para `develop`
 
 ### Registro de passagem
