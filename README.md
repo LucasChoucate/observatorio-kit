@@ -44,7 +44,7 @@ O projeto é feito em 5 etapas sequenciais (A → B → C → D → E). Cada int
 
 6. Acompanhe, faça os passos humanos que a IA pedir (painéis do Supabase e da Vercel, downloads) e confira o resultado no navegador.
 7. No final a IA atualiza o `PROGRESSO.md` e abre o Pull Request. Avise a próxima pessoa: ela é quem revisa o seu PR.
-8. Depois do merge na `develop`, abram o PR `develop → main` para atualizar o site publicado.
+8. Publicação no site: a etapa A abre o PR `develop → main` logo depois do merge. Nas etapas B, C e D isso é opcional (dá para juntar etapas), e a etapa E faz a publicação final. Ver `docs/PADROES.md`, seção 4.
 
 ### Enquanto não chega a sua vez
 

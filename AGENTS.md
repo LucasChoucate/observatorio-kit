@@ -40,4 +40,4 @@ Seu trabalho é executar **somente a etapa do integrante que está falando com v
 3. Commit: `docs(progresso): conclui etapa X`.
 4. `git push -u origin feature/etapa-x-<tema>`.
 5. Abra um Pull Request para a `develop` (use `gh pr create` se o GitHub CLI estiver disponível; senão, explique ao usuário como abrir pelo site). Título no padrão de commit, corpo seguindo `.github/pull_request_template.md`. Revisor: o responsável pela próxima etapa.
-6. Mostre ao usuário um resumo final com: o checklist da etapa, as pendências e os próximos passos humanos (revisão do PR, merge, merge da `develop` na `main` para atualizar a Vercel).
+6. Mostre ao usuário um resumo final com: o checklist da etapa, as pendências e os próximos passos humanos (revisão do PR, merge e, quando aplicável segundo `docs/PADROES.md` seção 4, o PR `develop → main` para atualizar a Vercel).

@@ -80,6 +80,7 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
   - Salvador vem do arquivo oficial por município (não da soma dos bairros) e aparece sempre como "Salvador (município)".
   - O `.gitattributes` força LF, porque a equipe usa sistemas diferentes e o Prettier exige LF.
   - As páginas são carregadas sob demanda (`React.lazy`) para manter o bundle inicial pequeno.
+  - Publicação na `main` (combinado com a equipe e registrado em `docs/PADROES.md` seção 4): a etapa A publica logo após o merge; nas etapas B, C e D o PR `develop → main` é opcional; a etapa E faz a publicação final com a tag `v1.0.0`.
 - **Pendências / problemas conhecidos:**
   - Revisora do PR da etapa A: Yasmin Queiroz (@yasminqjs), responsável da etapa B.
   - Criar as 5 Issues (adiado) e (opcional) o ruleset de `main`/`develop` (merge commit, 1 aprovação). Depois do primeiro CI, incluir os checks `Frontend (lint, testes e build)` e `ETL (sintaxe Python)` no ruleset.
