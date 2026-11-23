@@ -1,6 +1,6 @@
 # Progresso do projeto
 
-> **Etapa atual: B** (não iniciada; responsável: Yasmin Queiroz)
+> **Etapa atual: C** (não iniciada; responsável: Ramon Papes)
 
 Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê este arquivo para saber onde o projeto está e o atualiza ao terminar a etapa. Não apague registros de etapas anteriores.
 
@@ -8,8 +8,8 @@ Este arquivo é a memória compartilhada da equipe. A IA de cada integrante lê 
 
 | Etapa | Tema | Responsável | Status | Branch | PR | Concluída em |
 |---|---|---|---|---|---|---|
-| A | Fundação + demografia (Tela 1) | Lucas Choucate (@LucasChoucate) | concluída com pendências | `feature/etapa-a-fundacao` | [#1](https://github.com/LucasChoucate/observatorio-kit/pull/1) | 2026-11-20 |
-| B | Renda, escolaridade, habitação (Tela 2) | Yasmin Queiroz (@yasminqjs) | não iniciada | `feature/etapa-b-renda-habitacao` | | |
+| A | Fundação + demografia (Tela 1) | Lucas Choucate (@LucasChoucate) | concluída | `feature/etapa-a-fundacao` | [#1](https://github.com/LucasChoucate/observatorio-kit/pull/1) | 2026-11-20 |
+| B | Renda, escolaridade, habitação (Tela 2) | Yasmin Queiroz (@yasminqjs) | concluída | `feature/etapa-b-renda-habitacao` | | 2026-11-22 |
 | C | Infraestrutura urbana + mapa (Tela 3) | Ramon Papes (@RamonPapes) | não iniciada | `feature/etapa-c-mapa-urbano` | | |
 | D | Energia (Tela 4) | Rafael Cezimbra (@rafacezimbra) | não iniciada | `feature/etapa-d-energia` | | |
 | E | IPEA, metodologia, IEVS, fechamento (Tela 5) | Icaro Yan (@icaro-cimatec) | não iniciada | `feature/etapa-e-metodologia-final` | | |
@@ -26,9 +26,8 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 | 1 | Tela 1 (Visão geral) | Barras agrupadas: população e domicílios ocupados por bairro | A |
 | 2 | Tela 1 (Visão geral) | Barras agrupadas: composição etária (0–14, 15–59, 60+) com Salvador como referência | A |
 | 3 | Tela 1 (Visão geral) | Barras: densidade demográfica dos bairros e de Salvador | A |
-
----|---|---|---|
-| | | | |
+| 4 | Tela 2 (Comparativo) | Barras: comparação territorial do indicador selecionado (Beiru vs Pernambués vs Salvador) | B |
+| 5 | Tela 2 (Comparativo) | Barras agrupadas: panorama comparativo de taxas percentuais (educação e saneamento) | B |
 
 ---
 
@@ -120,14 +119,43 @@ Status possíveis: `não iniciada`, `em andamento`, `concluída`, `concluída co
 - [x] Testes novos passando; `lint`, `test` e `build` sem erro (51 testes no Vitest)
 - [x] Catálogo atualizado (incluindo não disponíveis)
 - [x] `docs/relatorio/02-rendimento.md` e `03-condicoes-habitacionais.md` escritos
-- [ ] PR aberto para `develop`
+- [x] PR aberto para `develop`
 
 ### Registro de passagem
 - **O que foi feito:**
+  - Script ETL `etl/b_renda_habitacao.py` implementado e testado com idempotência (saída em `data/processed/b_renda_habitacao.csv` com 18 observações calculadas e validadas).
+  - Indicadores calculados para Beiru/Tancredo Neves, Pernambués e Salvador (referência): `soc_taxa_alfabetizacao_pct` (alfabetização 15+), `hab_agua_rede_geral_pct` (água da rede), `hab_esgoto_adequado_pct` (esgoto por rede ou fossa ligada), `hab_lixo_coletado_pct` (coleta direta + caçamba), `hab_lixo_cacamba_pct` (descarte em caçamba) e `hab_sem_banheiro_exclusivo_pct` (sem banheiro exclusivo).
+  - Relatório de qualidade gerado e aprovado em `docs/qualidade/b_renda_habitacao.md` (100% das 22 regras validadas sem falhas).
+  - Relatórios analíticos fundamentados elaborados em `docs/relatorio/02-rendimento.md` (pergunta 2) e `docs/relatorio/03-condicoes-habitacionais.md` (pergunta 3).
+  - Catálogo em `docs/catalogo/CATALOGO.md` atualizado com todos os 6 novos indicadores e registro explícito da indisponibilidade metodológica de renda nos agregados por bairro do Censo 2022.
+  - Tela 1 (`VisaoGeral.jsx`): adicionada seção de cards de educação e saneamento básico por bairro e nota metodológica sobre rendimento.
+  - Tela 2 (`Comparativo.jsx`): implementação completa da tela de Comparativo Territorial, contendo:
+    - Filtros dinâmicos por dimensão (demográfica, social, habitacional, econômica e todas) e por indicador individual;
+    - 2 visualizações funcionais (`GraficoBarras`): comparação territorial do indicador selecionado e panorama geral de taxas percentuais;
+    - Tabela comparativa com indicador, unidade, valores nos dois bairros e Salvador, cálculo pareado de diferenças absolutas e percentuais com validação por `saoComparaveis()` e `motivoNaoComparavel()`;
+    - Painel de interpretação analítica fundamentada por dimensão;
+    - Alerta metodológico contextual na dimensão econômica;
+    - Responsividade em dispositivos móveis e suporte a leitor de tela / acessibilidade.
+  - Testes: novos testes criados em `Comparativo.test.jsx` e `formatar.test.js`, ampliando a suíte para 51 testes no Vitest (todos passando).
+  - Qualidade: `npm run lint` (ESLint) e `npm run format:check` (Prettier) 100% limpos e build de produção Vite verificado.
 - **Decisões tomadas:**
+  - A indisponibilidade de variáveis de rendimento nominal ou por salários mínimos nos agregados por bairro do Censo 2022 foi confirmada diretamente no dicionário oficial do IBGE e registrada de forma transparente, sem inventar dados nem interpolar estimativas silenciosas.
+  - A taxa de alfabetização da população de 15 anos ou mais foi adotada como proxy de capital humano e potencial de renda para contextualizar a vulnerabilidade social.
+  - Na tabela comparativa, a base de cálculo da diferença percentual foi fixada em Pernambués (`(Beiru − Pernambués) ÷ Pernambués × 100`).
+  - Para variáveis em porcentagem, a diferença absoluta é rotulada e tratada em pontos percentuais (`p.p.`).
+  - O indicador de lixo coletado soma a coleta direta no domicílio (`V00397`) e o descarte em caçamba de serviço de limpeza (`V00398`). Foi criado também o indicador específico `hab_lixo_cacamba_pct`, que revelou dependência de caçamba em 68,2% dos domicílios de Beiru e 54,7% em Pernambués, atestando restrições viárias e topográficas de acesso a caminhões e serviços públicos de emergência (inclusive manutenção da rede elétrica).
 - **Pendências / problemas conhecidos:**
+  - O script de ETL rodou com sucesso localmente com `--sem-carga`; a gravação definitiva no Supabase depende da aplicação das chaves em `etl/.env` pelo time.
+  - Revisão do PR da Etapa B a ser realizada por Ramon Papes (@RamonPapes), responsável pela Etapa C.
 - **O que a etapa C precisa saber:**
+  - Os limites dos bairros e as malhas territoriais estão disponíveis no FTP do IBGE em `malha_com_atributos/bairros/` (subpasta do Censo 2022).
+  - A densidade demográfica (`dem_densidade_hab_km2`) e a área do polígono (`dem_area_km2`) já foram gravadas na Etapa A. A Etapa C deve converter os limites para um GeoJSON leve em `web/public/geo/`.
+  - Dados de características do entorno urbano (arborização, calçada, iluminação pública, pavimentação) não estão presentes nos agregados por bairro do Censo 2022; verifique se há arquivos temáticos específicos de entorno ou registre a indisponibilidade no catálogo conforme as regras.
+  - Na Tela 1 (`VisaoGeral.jsx`) há o comentário reservado `{/* ETAPA C: acrescentar aqui os cards de infraestrutura urbana deste bairro. */}`.
 - **Como testar:**
+  1. `cd web && npm test -- --run && npm run lint && npm run format:check && npm run build` (51 testes passando).
+  2. `python etl/b_renda_habitacao.py --sem-carga` gera `data/processed/b_renda_habitacao.csv` e `docs/qualidade/b_renda_habitacao.md` aprovado.
+  3. `npm run dev` e navegar para http://localhost:5173/comparativo: testar os filtros de dimensão, a tabela de diferenças pareadas e os gráficos.
 
 ---
 
