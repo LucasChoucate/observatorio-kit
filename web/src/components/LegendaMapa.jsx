@@ -1,5 +1,5 @@
 import { rotuloEscala } from '../utils/formatar';
-import { COR_SEM_DADO, corDaClasse, rotuloClasse } from '../utils/mapa';
+import { COR_SEM_DADO, corDaClasse, RAMPA_SEQUENCIAL, rotuloClasse } from '../utils/mapa';
 import SeloFonte from './SeloFonte';
 
 function Amostra({ cor, tracejada = false }) {
@@ -28,6 +28,15 @@ export default function LegendaMapa({
   observacaoRef,
 }) {
   const porQuantis = classes.some((classe) => classe.min !== classe.max);
+  let notaFaixas = 'Um tom por valor observado.';
+  if (porQuantis && classes.length === RAMPA_SEQUENCIAL.length) {
+    notaFaixas =
+      'Faixas por quintis dos valores dos polígonos (cada faixa reúne cerca de 1/5 deles).';
+  } else if (porQuantis) {
+    notaFaixas =
+      `Faixas por quintis dos valores dos polígonos. Muitos polígonos têm o mesmo valor, então ` +
+      `alguns cortes coincidem: sobram ${classes.length} faixas, com quantidades diferentes de polígonos.`;
+  }
   return (
     <section
       aria-labelledby="legenda-mapa"
@@ -56,11 +65,7 @@ export default function LegendaMapa({
         )}
       </ul>
       <p className="text-xs text-stone-600">{leitura}</p>
-      <p className="text-xs text-stone-500">
-        {porQuantis
-          ? 'Faixas por quintis dos valores dos polígonos (cada faixa reúne cerca de 1/5 deles).'
-          : 'Um tom por valor observado.'}
-      </p>
+      <p className="text-xs text-stone-500">{notaFaixas}</p>
       {observacaoRef && <SeloFonte observacao={observacaoRef} escala={rotuloEscala(escala)} />}
     </section>
   );
