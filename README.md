@@ -12,7 +12,7 @@ Projeto integrador da UC Desenvolvimento Fullstack, SENAI CIMATEC, Prof. Celso B
 |---|---|---|---|
 | A | Lucas Choucate | [@LucasChoucate](https://github.com/LucasChoucate) | Fundação do projeto (repositório, Supabase, React, Vercel), dados demográficos, Tela 1 |
 | B | Yasmin Queiroz | [@yasminqjs](https://github.com/yasminqjs) | Renda, escolaridade e habitação, Tela 2 (comparativo) |
-| C | [nome] | [@usuario] | Infraestrutura urbana, malha territorial, Tela 3 (mapa) |
+| C | Ramon Papes | [@RamonPapes](https://github.com/RamonPapes) | Infraestrutura urbana, malha territorial, Tela 3 (mapa) |
 | D | [nome] | [@usuario] | Dados energéticos (EPE), proxies socioenergéticos, Tela 4 |
 | E | [nome] | [@usuario] | IPEA, Tela 5 (metodologia), IEVS, relatório e entrega final |
 
@@ -83,6 +83,8 @@ cp etl/.env.example etl/.env    # preencha SUPABASE_URL e SUPABASE_SERVICE_ROLE_
    ```
    Saídas: `data/processed/a_demografia.csv` e `docs/qualidade/a_demografia.md`. O script pode ser
    rodado várias vezes sem duplicar dados (upsert).
+3. Etapa C: rode `python etl/c_malha.py` antes de `python etl/c_urbano.py`. O primeiro gera os
+   GeoJSON de `web/public/geo/` e cadastra os setores censitários, e o segundo grava os valores por setor.
 
 ### Banco (Supabase)
 
