@@ -9,6 +9,9 @@ Downloads (acesso em 2026-11-27), descompactar em data/raw/:
 Dicionário (dicionario_entorno_domicilios.xlsx dentro do zip):
   https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/dicionarios_de_dados_entorno.zip
 Relação setor → bairro: malha BA_setores_CD2022.gpkg (ver etl/c_malha.py).
+Conferência externa (opcional, 72 MB): percentuais oficiais do IBGE por setor, calculados sobre
+moradores, em
+  https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Dados_percentuais_das_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/br_setores_entorno_cd2022(in).csv
 
 Universo: domicílios particulares permanentes ocupados (DPPO) em setores escolhidos para a
 aplicação do entorno (V05000). Cada variável conta os domicílios cuja face de quadra tem (ou não)
@@ -22,6 +25,8 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import math
 import sys
 
@@ -58,6 +63,25 @@ ARQUIVOS = {
 }
 MALHA_SETORES = 'BA_setores_CD2022.gpkg'
 CSV_DEMOGRAFIA = DIR_PROCESSED / 'a_demografia.csv'
+PERCENTUAIS_IBGE = 'br_setores_entorno_cd2022(in).csv'
+URL_PERCENTUAIS_IBGE = (
+    'https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/'
+    'Dados_percentuais_das_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/'
+    'br_setores_entorno_cd2022(in).csv'
+)
+# Colunas do arquivo de percentuais (moradores) equivalentes aos nossos indicadores (domicílios)
+COLUNAS_PERCENTUAIS_IBGE = {
+    'urb_iluminacao_publica_pct': 'v05212_perc',
+    'urb_via_pavimentada_pct': 'v05206_perc',
+    'urb_calcada_pct': 'v05221_perc',
+    'urb_bueiro_pct': 'v05209_perc',
+    'urb_arborizacao_pct': 'v05200_v05230_perc',
+    'urb_rampa_cadeirante_pct': 'v05227_perc',
+    'urb_via_sem_veiculos_pct': 'v05203_perc',
+}
+# Setor com metade ou mais das faces não declaradas: o percentual sobre o total vira um piso
+# artificial (ex.: 0% de iluminação num setor 100% não declarado). Grava-se ausente, com nota.
+LIMITE_NAO_DECLARADO_PCT = 50
 
 UNIVERSO = 'V05000'
 # Grupos de categorias que, somados, devem fechar o universo V05000 (dicionário do entorno).
@@ -274,9 +298,17 @@ def calcular(dados: dict, setores: pd.DataFrame) -> pd.DataFrame:
                           ARQUIVOS['setor'][0])
                 continue
             valor = percentual(numerador.sum(), linha[UNIVERSO])
-            nota = texto_base(linha) if not math.isnan(valor) else (
-                'Sem domicílios no universo do entorno: sem dado.'
-            )
+            nao_declarado = percentual(linha[NAO_DECLARADO], linha[UNIVERSO])
+            if math.isnan(valor):
+                valor, nota = None, 'Sem domicílios no universo do entorno: sem dado.'
+            elif nao_declarado >= LIMITE_NAO_DECLARADO_PCT:
+                valor = None
+                nota = (
+                    f'{texto_base(linha)} Valor omitido: com tantas faces não declaradas, o '
+                    'percentual sobre o total seria um piso artificial (sem dado).'
+                )
+            else:
+                nota = texto_base(linha)
             registrar(codigo, territorio, indicador, valor, nota, ARQUIVOS['setor'][0])
     return pd.DataFrame(linhas, columns=COLUNAS_SAIDA)
 
@@ -291,6 +323,58 @@ def texto_base(linha: pd.Series) -> str:
         f'Base: {base_txt} domicílios no universo do entorno (V05000); faces não declaradas: '
         f'{nd_txt}%.'
     )
+
+
+def ler_percentuais_ibge(setores: pd.DataFrame) -> pd.DataFrame | None:
+    """Lê os percentuais oficiais por setor (moradores) dos setores do projeto, se houver.
+
+    Cada linha do arquivo vem inteira entre aspas, com as aspas internas dobradas; por isso a
+    linha é desembrulhada antes do parse.
+    """
+    caminho = DIR_RAW / PERCENTUAIS_IBGE
+    if not caminho.exists():
+        return None
+    codigos = set(setores['CD_SETOR'])
+    with caminho.open(encoding='utf-8-sig') as arquivo:
+        cabecalho = arquivo.readline().strip()
+        linhas = []
+        for bruta in arquivo:
+            bruta = bruta.strip()
+            if '2927408' not in bruta:
+                continue
+            if bruta.startswith('"') and bruta.endswith('"'):
+                bruta = bruta[1:-1].replace('""', '"')
+            linhas.append(bruta)
+    tabela = pd.read_csv(io.StringIO('\n'.join([cabecalho] + linhas)), dtype={'cd_setor': str},
+                         quoting=csv.QUOTE_MINIMAL)
+    return tabela[tabela['cd_setor'].isin(codigos)].set_index('cd_setor')
+
+
+def comparar_com_percentuais_ibge(saida: pd.DataFrame, setores: pd.DataFrame,
+                                  relatorio: RelatorioQualidade) -> None:
+    """Confere os percentuais por setor (domicílios) com os publicados pelo IBGE (moradores)."""
+    oficiais = ler_percentuais_ibge(setores)
+    if oficiais is None:
+        relatorio.observacoes.append(
+            f'Conferência externa não feita: {PERCENTUAIS_IBGE} não está em data/raw/ '
+            f'(opcional, {URL_PERCENTUAIS_IBGE}).'
+        )
+        return
+    relatorio.registrar_arquivo(
+        PERCENTUAIS_IBGE, URL_PERCENTUAIS_IBGE, '-', len(oficiais), 'utf-8 (linhas entre aspas)'
+    )
+    por_setor = saida[saida['codigo_ibge'].isin(oficiais.index)]
+    for codigo_ind, coluna in COLUNAS_PERCENTUAIS_IBGE.items():
+        nossos = por_setor[por_setor['indicador_codigo'] == codigo_ind].set_index('codigo_ibge')
+        nossos = nossos['valor'].dropna()
+        diferenca = (nossos - oficiais.loc[nossos.index, coluna].astype(float)).abs()
+        relatorio.validar(
+            f'{codigo_ind}: mediana da diferença para o percentual oficial do IBGE por setor '
+            '(moradores) abaixo de 2 p.p.',
+            diferenca.median() < 2,
+            f'{len(diferenca)} setores; mediana {diferenca.median():.2f} p.p., máxima '
+            f'{diferenca.max():.2f} p.p.',
+        )
 
 
 def validar(dados: dict, setores: pd.DataFrame, saida: pd.DataFrame,
@@ -361,13 +445,24 @@ def validar(dados: dict, setores: pd.DataFrame, saida: pd.DataFrame,
         'Sem duplicidade na chave (território, indicador, fonte, ano)',
         not saida.duplicated(['codigo_ibge', 'indicador_codigo', 'fonte_sigla', 'ano']).any(),
     )
+    por_setor = saida[saida['codigo_ibge'].str.len() > 10]
     relatorio.observacoes.append(
-        f"Setores com dado: {len(numericos)} de {len(setores)}. Sem linha no arquivo: "
+        f'Setores no arquivo com valores numéricos: {len(numericos)} de {len(setores)}; '
+        f"observações por setor com valor no mapa: {por_setor['valor'].notna().sum()} de "
+        f'{len(por_setor)}. Sem linha no arquivo: '
         f"{', '.join(dados['sem_linha']) or 'nenhum'}. Com sigilo (X): "
         f"{', '.join(dados['sigilosos']) or 'nenhum'}. A soma dos setores com dado já fecha o "
         'total publicado de cada bairro, então os setores ausentes não acrescentam domicílios a '
         'esse total.'
     )
+    for codigo, linha in dados['setor'].dropna().iterrows():
+        nd = percentual(linha[NAO_DECLARADO], linha[UNIVERSO])
+        if nd >= LIMITE_NAO_DECLARADO_PCT:
+            relatorio.ausencias.append(
+                f'Setor {codigo}: {nd:.1f}% das faces não declaradas (base de '
+                f'{linha[UNIVERSO]:.0f} domicílios); valores gravados como ausentes (null), com '
+                'nota. O percentual sobre o total, método do IBGE, seria um piso artificial.'
+            )
 
 
 def main() -> int:
@@ -381,6 +476,7 @@ def main() -> int:
     dados = ler_agregados(relatorio, setores)
     saida = calcular(dados, setores)
     validar(dados, setores, saida, relatorio)
+    comparar_com_percentuais_ibge(saida, setores, relatorio)
 
     DIR_PROCESSED.mkdir(parents=True, exist_ok=True)
     caminho_csv = DIR_PROCESSED / f'{SCRIPT}.csv'

@@ -62,6 +62,14 @@ arquivos de 2025-04-17). Os nomes dos `.zip` de domicílios têm `í` (codificad
 | `Agregados_por_setores_entorno_domicílios_BR.zip` → `Agregados_por_setores_entorno_domicílios_BR.csv` (12 MB) | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/Agregados_por_Setor_csv/Agregados_por_setores_entorno_domic%c3%adlios_BR.zip) | 2026-11-27 | `etl/c_urbano.py` (mapa por setor) |
 | `dicionarios_de_dados_entorno.zip` → `dicionario_entorno_domicilios.xlsx` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/dicionarios_de_dados_entorno.zip) | 2026-11-27 | consulta (V05000 a V05034) |
 
+Conferência externa (opcional): os percentuais oficiais por setor, calculados pelo IBGE sobre moradores,
+em `Censo_Demografico_2022/Dados_percentuais_das_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/`
+(arquivo de 2025-12-12). Se o arquivo estiver em `data/raw/`, `etl/c_urbano.py` compara os valores.
+
+| Arquivo | URL | Acesso | Usado por |
+|---|---|---|---|
+| `br_setores_entorno_cd2022(in).csv` (72 MB) | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Dados_percentuais_das_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/br_setores_entorno_cd2022(in).csv) | 2026-11-27 | `etl/c_urbano.py` (validação) |
+
 Na mesma divulgação há os recortes `entorno_moradores` (V05200 a V05234, contagem de moradores) e
 `entorno_faces` (V05400 a V05434, contagem de faces de quadra), não usados no observatório.
 
