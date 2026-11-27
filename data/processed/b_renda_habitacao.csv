@@ -1,4 +1,10 @@
 codigo_ibge,territorio,indicador_codigo,fonte_sigla,ano,valor,nota,arquivo_origem,variaveis_origem
+2927408018,Beiru / Tancredo Neves,eco_rendimento_medio_responsavel_rs,IBGE_CENSO_2022,2022,2035.87,Base: 15.454 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 58.617.,Agregados_por_bairros_renda_responsavel_BR.csv,V06004
+2927408117,Pernambués,eco_rendimento_medio_responsavel_rs,IBGE_CENSO_2022,2022,2316.25,Base: 21.561 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 3.307.,Agregados_por_bairros_renda_responsavel_BR.csv,V06004
+2927408,Salvador,eco_rendimento_medio_responsavel_rs,IBGE_CENSO_2022,2022,3160.73,Base: 958.539 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 13.801.,Agregados_por_municipios_renda_responsavel_BR.csv,V06004
+2927408018,Beiru / Tancredo Neves,eco_rendimento_mediano_responsavel_rs,IBGE_CENSO_2022,2022,1212.0,Base: 15.454 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 58.617.,Agregados_por_bairros_renda_responsavel_BR.csv,V06006
+2927408117,Pernambués,eco_rendimento_mediano_responsavel_rs,IBGE_CENSO_2022,2022,1212.0,Base: 21.561 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 3.307.,Agregados_por_bairros_renda_responsavel_BR.csv,V06006
+2927408,Salvador,eco_rendimento_mediano_responsavel_rs,IBGE_CENSO_2022,2022,1230.0,Base: 958.539 pessoas responsáveis em DPPO (V06001). Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ 13.801.,Agregados_por_municipios_renda_responsavel_BR.csv,V06006
 2927408018,Beiru / Tancredo Neves,soc_taxa_alfabetizacao_pct,IBGE_CENSO_2022,2022,95.0404,,Agregados_por_bairros_alfabetizacao_BR.csv,"V00900, V00901"
 2927408117,Pernambués,soc_taxa_alfabetizacao_pct,IBGE_CENSO_2022,2022,96.7562,,Agregados_por_bairros_alfabetizacao_BR.csv,"V00900, V00901"
 2927408,Salvador,soc_taxa_alfabetizacao_pct,IBGE_CENSO_2022,2022,96.6303,,Agregados_por_municipios_alfabetizacao_BR.csv,"V00900, V00901"
