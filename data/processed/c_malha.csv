@@ -1,0 +1,3 @@
+codigo_ibge,territorio,setores,area_km2_ibge,area_km2_utm24s,diferenca_pct,crs_calculo
+2927408018,Beiru / Tancredo Neves,72,1.636208,1.635044,-0.0711,EPSG:31984
+2927408117,Pernambués,100,3.207388,3.20509,-0.0716,EPSG:31984

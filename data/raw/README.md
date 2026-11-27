@@ -41,6 +41,30 @@ etapa B.
 
 Formato dos CSVs: separador `;`, encoding `latin-1`, decimal com vírgula, valores entre aspas.
 
+## Etapa C (malha territorial e entorno urbano)
+
+Malha com atributos do Censo 2022 (versão de 2024-11-13), em `Agregados_por_Setores_Censitarios/malha_com_atributos/`:
+
+| Arquivo | URL | Acesso | Usado por |
+|---|---|---|---|
+| `BA_bairros_CD2022.gpkg` (2,2 MB) | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/malha_com_atributos/bairros/gpkg/UF/BA/BA_bairros_CD2022.gpkg) | 2026-11-27 | `etl/c_malha.py` |
+| `BA_setores_CD2022.gpkg` (112 MB) | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/malha_com_atributos/setores/gpkg/UF/BA/BA_setores_CD2022.gpkg) | 2026-11-27 | `etl/c_malha.py`, `etl/c_urbano.py` (setor → bairro) |
+| `Dicionario_de_dados_malha_agregados.xlsx` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/malha_com_atributos/Dicionario_de_dados_malha_agregados.xlsx) | 2026-11-27 | consulta (CD_TIPO, CD_SITUACAO) |
+
+Características urbanísticas do entorno dos domicílios: divulgação própria do Censo 2022
+(`Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/`,
+arquivos de 2025-04-17). Os nomes dos `.zip` de domicílios têm `í` (codificado como `%c3%ad` na URL).
+
+| Arquivo | URL | Acesso | Usado por |
+|---|---|---|---|
+| `Agregados_por_bairros_entorno_domicílios_BR.zip` → `Agregados_por_bairros_entorno_domicílios_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/Agregados_por_Bairro_csv/Agregados_por_bairros_entorno_domic%c3%adlios_BR.zip) | 2026-11-27 | `etl/c_urbano.py` |
+| `Agregados_por_municipios_entorno_domicílios_BR.zip` → `Agregados_por_municipios_entorno_domicílios_BR.csv` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/Agregados_por_Municipio_csv/Agregados_por_municipios_entorno_domic%c3%adlios_BR.zip) | 2026-11-27 | `etl/c_urbano.py` (Salvador) |
+| `Agregados_por_setores_entorno_domicílios_BR.zip` → `Agregados_por_setores_entorno_domicílios_BR.csv` (12 MB) | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/Agregados_por_Setor_csv/Agregados_por_setores_entorno_domic%c3%adlios_BR.zip) | 2026-11-27 | `etl/c_urbano.py` (mapa por setor) |
+| `dicionarios_de_dados_entorno.zip` → `dicionario_entorno_domicilios.xlsx` | [link](https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Caracteristicas_urbanisticas_do_entorno_dos_domicilios/dicionarios_de_dados_entorno.zip) | 2026-11-27 | consulta (V05000 a V05034) |
+
+Na mesma divulgação há os recortes `entorno_moradores` (V05200 a V05234, contagem de moradores) e
+`entorno_faces` (V05400 a V05434, contagem de faces de quadra), não usados no observatório.
+
 ## Outros arquivos por bairro disponíveis (para as etapas C e D)
 
 Mesmo diretório `Agregados_por_Bairro_csv/` (há equivalentes por município em `Agregados_por_Municipio_csv/`):
