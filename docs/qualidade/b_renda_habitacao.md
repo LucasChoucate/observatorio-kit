@@ -1,6 +1,6 @@
 # Relatório de qualidade: renda e habitação (etapa B)
 
-Gerado automaticamente por `etl/b_renda_habitacao.py` em 2026-11-22.
+Gerado automaticamente por `etl/b_renda_habitacao.py` em 2026-11-27.
 
 ## Arquivos de origem
 

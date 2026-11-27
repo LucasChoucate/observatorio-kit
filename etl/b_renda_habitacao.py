@@ -262,8 +262,8 @@ def calcular(dados: pd.DataFrame) -> pd.DataFrame:
     }
 
     origem = {
-        'bairro': 'Agregados_por_bairros_{}.csv',
-        'municipio': 'Agregados_por_municipios_{}.csv',
+        'bairro': 'Agregados_por_bairros_{}_BR.csv',
+        'municipio': 'Agregados_por_municipios_{}_BR.csv',
     }
 
     linhas = []
