@@ -32,6 +32,12 @@ async function carregarBase() {
     buscarTerritorios({ tipo: 'bairro' }),
     buscarObservacoes({ dimensao: 'urbana', tiposTerritorio: ['bairro', 'municipio'] }),
   ]);
+  // A malha do IBGE grafa "Beiru / Tancredo Neves"; na tela vale o nome do banco, pelo código.
+  const nomes = Object.fromEntries(bairros.map((b) => [b.codigo_ibge, b.nome]));
+  for (const { properties: p } of bairrosGeo.features) p.nome = nomes[p.codigo_ibge] ?? p.nome;
+  for (const { properties: p } of setoresGeo.features) {
+    p.nome_bairro = nomes[p.codigo_bairro] ?? p.nome_bairro;
+  }
   return { bairrosGeo, setoresGeo, indicadores, bairros, observacoesUrbanas };
 }
 

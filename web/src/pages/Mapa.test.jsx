@@ -45,11 +45,12 @@ const feature = (codigo_ibge, props = {}) => ({
   geometry: { type: 'Polygon', coordinates: [] },
 });
 const geo = {
-  bairros: { type: 'FeatureCollection', features: [feature('111', { nome: 'Bairro Um' })] },
+  bairros: { type: 'FeatureCollection', features: [feature('111', { nome: 'BAIRRO UM' })] },
   setores: {
     type: 'FeatureCollection',
+    // Grafia da malha diferente da do banco: a tela deve usar a do banco.
     features: ['s1', 's2', 's3'].map((c) =>
-      feature(c, { tipo: 'setor_censitario', nome_bairro: 'Bairro Um' }),
+      feature(c, { tipo: 'setor_censitario', codigo_bairro: '111', nome_bairro: 'BAIRRO UM' }),
     ),
   },
 };
