@@ -180,6 +180,17 @@ describe('Comparativo', () => {
     ).toBeInTheDocument();
   });
 
+  it('oferece a dimensão urbana com a leitura do entorno', async () => {
+    render(<Comparativo />);
+    await screen.findByRole('heading', { name: 'Comparativo Territorial' });
+
+    await userEvent.selectOptions(screen.getByLabelText('Dimensão:'), 'urbana');
+    expect(
+      screen.getByRole('heading', { name: 'Leitura da dimensão urbana (entorno)' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Iluminação pública não mede a continuidade/)).toBeInTheDocument();
+  });
+
   it('exibe estado vazio quando não há observações', async () => {
     vi.mocked(buscarObservacoes).mockResolvedValue([]);
     render(<Comparativo />);

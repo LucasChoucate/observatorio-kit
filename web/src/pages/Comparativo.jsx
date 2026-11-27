@@ -32,6 +32,7 @@ const DIMENSOES = [
   { valor: 'social', rotulo: 'Social' },
   { valor: 'habitacional', rotulo: 'Habitacional' },
   { valor: 'economica', rotulo: 'Econômica' },
+  { valor: 'urbana', rotulo: 'Urbana (entorno)' },
 ];
 
 const ROTULOS_COMPACTOS = {
@@ -45,6 +46,13 @@ const ROTULOS_COMPACTOS = {
   hab_lixo_coletado_pct: 'Lixo coletado',
   hab_lixo_cacamba_pct: 'Lixo caçamba',
   hab_sem_banheiro_exclusivo_pct: 'Sem banheiro',
+  urb_iluminacao_publica_pct: 'Iluminação pública',
+  urb_via_pavimentada_pct: 'Via pavimentada',
+  urb_calcada_pct: 'Calçada',
+  urb_bueiro_pct: 'Bueiro',
+  urb_arborizacao_pct: 'Arborização',
+  urb_rampa_cadeirante_pct: 'Rampa',
+  urb_via_sem_veiculos_pct: 'Via sem veículos',
 };
 
 // Textos de leitura de cada dimensão. Não trazem números: os valores ficam na tabela e nos
@@ -69,6 +77,11 @@ const ANALISES_DIMENSAO = {
     titulo: 'Leitura da dimensão habitacional',
     texto:
       'Água, esgoto e coleta de lixo indicam a forma de atendimento declarada no Censo, não a regularidade nem a qualidade do serviço. A participação do descarte em caçamba mostra como o lixo é recolhido, mas o Censo não registra o motivo. Os indicadores de entorno (Tela 3), como as faces de quadra sem circulação de veículos, ajudam a contextualizar a diferença, sem provar causa.',
+  },
+  urbana: {
+    titulo: 'Leitura da dimensão urbana (entorno)',
+    texto:
+      'Os indicadores do entorno descrevem a face de quadra onde fica o domicílio, observada pelo recenseador do Censo 2022. Mostram presença do item, não a qualidade nem a manutenção. Iluminação pública não mede a continuidade nem a qualidade do fornecimento de energia nas casas. O detalhe por setor censitário está na Tela 3.',
   },
   economica: {
     titulo: 'Leitura da dimensão econômica',
