@@ -23,6 +23,14 @@ const CARDS_DEMOGRAFICOS = [
   'dem_idade_60_mais_pct',
   'dem_mulheres_pct',
 ];
+const CARDS_SOCIAIS_HABITACIONAIS = [
+  'soc_taxa_alfabetizacao_pct',
+  'hab_agua_rede_geral_pct',
+  'hab_esgoto_adequado_pct',
+  'hab_lixo_coletado_pct',
+  'hab_lixo_cacamba_pct',
+  'hab_sem_banheiro_exclusivo_pct',
+];
 const CONTAGENS = [
   { codigo: 'dem_populacao', rotulo: 'População' },
   { codigo: 'dem_domicilios', rotulo: 'Domicílios ocupados' },
@@ -37,7 +45,7 @@ const ROTULO_SALVADOR = 'Salvador (município)';
 async function carregarVisaoGeral() {
   const [bairros, observacoes] = await Promise.all([
     buscarTerritorios({ tipo: 'bairro' }),
-    buscarObservacoes({ dimensao: 'demografica', tiposTerritorio: ['bairro', 'municipio'] }),
+    buscarObservacoes({ tiposTerritorio: ['bairro', 'municipio'] }),
   ]);
   return { bairros, observacoes };
 }
@@ -46,9 +54,17 @@ function primeiraObservacao(observacoes, codigos) {
   return observacoes.find((obs) => codigos.includes(obs.indicador_codigo)) ?? null;
 }
 
-function SecaoBairro({ bairro, observacoes }) {
+function SecaoBairro({ bairro, observacoes, duasColunas }) {
+  const cardsSaneamento = CARDS_SOCIAIS_HABITACIONAIS.map((codigo) => ({
+    codigo,
+    obs: encontrarObservacao(observacoes, codigo, bairro.codigo_ibge),
+    ref: encontrarObservacao(observacoes, codigo, CODIGO_SALVADOR),
+  })).filter((item) => item.obs != null);
+
+  const gridCards = `grid gap-3 sm:grid-cols-2 ${duasColunas ? '2xl:grid-cols-3' : 'lg:grid-cols-3'}`;
+
   return (
-    <section aria-labelledby={`bairro-${bairro.codigo_ibge}`} className="space-y-3">
+    <section aria-labelledby={`bairro-${bairro.codigo_ibge}`} className="space-y-4">
       <h2
         id={`bairro-${bairro.codigo_ibge}`}
         className="flex items-center gap-2 text-lg font-semibold"
@@ -60,7 +76,7 @@ function SecaoBairro({ bairro, observacoes }) {
         />
         {bairro.nome}
       </h2>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={gridCards}>
         {CARDS_DEMOGRAFICOS.map((codigo) => (
           <CardIndicador
             key={codigo}
@@ -70,7 +86,32 @@ function SecaoBairro({ bairro, observacoes }) {
           />
         ))}
       </div>
-      {/* ETAPA B: acrescentar aqui os cards de rendimento e saneamento deste bairro. */}
+
+      {/* ETAPA B: cards de educação e saneamento básico do bairro */}
+      {cardsSaneamento.length > 0 && (
+        <div className="space-y-2 pt-2">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-500">
+            Educação e saneamento básico (Censo 2022)
+          </h3>
+          <div className={gridCards}>
+            {cardsSaneamento.map(({ codigo, obs, ref }) => (
+              <CardIndicador
+                key={codigo}
+                observacao={obs}
+                referencia={ref}
+                rotuloReferencia={ROTULO_SALVADOR}
+              />
+            ))}
+          </div>
+          <div className="rounded-lg border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900">
+            <span className="font-semibold">Rendimento nominal por bairro:</span> O IBGE não
+            publicou variáveis de renda nos arquivos de agregados por bairro do Censo 2022. Os dados
+            de alfabetização e condições habitacionais atuam como proxies contextuais de
+            vulnerabilidade. Consulte a página de Metodologia para detalhes.
+          </div>
+        </div>
+      )}
+
       {/* ETAPA C: acrescentar aqui os cards de infraestrutura urbana deste bairro. */}
     </section>
   );
@@ -134,7 +175,12 @@ export default function VisaoGeral() {
 
         <div className={`grid gap-8 ${selecionados.length > 1 ? 'xl:grid-cols-2' : ''}`}>
           {selecionados.map((bairro) => (
-            <SecaoBairro key={bairro.codigo_ibge} bairro={bairro} observacoes={observacoes} />
+            <SecaoBairro
+              key={bairro.codigo_ibge}
+              bairro={bairro}
+              observacoes={observacoes}
+              duasColunas={selecionados.length > 1}
+            />
           ))}
         </div>
 

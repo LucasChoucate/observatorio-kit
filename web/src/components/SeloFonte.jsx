@@ -18,7 +18,7 @@ export default function SeloFonte({ observacao, escala, ano, className = '' }) {
     <p
       className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-500 ${className}`}
     >
-      <span>
+      <span className="whitespace-nowrap">
         Fonte:{' '}
         <a
           href={observacao.fonte_url}
@@ -30,10 +30,14 @@ export default function SeloFonte({ observacao, escala, ano, className = '' }) {
           {siglaInstituicao(observacao.instituicao)}
         </a>
       </span>
-      <span aria-hidden="true">·</span>
-      <span>Ano: {ano ?? observacao.ano}</span>
-      <span aria-hidden="true">·</span>
-      <span>Escala: {escala ?? rotuloEscala(observacao.territorio_tipo)}</span>
+      <span className="flex items-center gap-2 whitespace-nowrap">
+        <span aria-hidden="true">·</span>
+        <span>Ano: {ano ?? observacao.ano}</span>
+      </span>
+      <span className="flex items-center gap-2 whitespace-nowrap">
+        <span aria-hidden="true">·</span>
+        <span>Escala: {escala ?? rotuloEscala(observacao.territorio_tipo)}</span>
+      </span>
       {classificacao && (
         <span
           title={observacao.metodologia ?? undefined}
