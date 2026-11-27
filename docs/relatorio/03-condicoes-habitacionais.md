@@ -1,5 +1,9 @@
 # Pergunta 3: Quais condições habitacionais podem representar vulnerabilidade?
 
+> Revisada na etapa C (2026-11-27): as explicações para o uso de caçamba (relevo, vielas, acesso de
+> viaturas da rede elétrica) passaram a ser tratadas como hipóteses, porque o Censo não registra o
+> motivo. O dado de entorno sobre vias sem circulação de veículos (pergunta 4) entra como contexto.
+
 ## Resposta curta
 
 A análise dos dados do Censo 2022 para Beiru/Tancredo Neves e Pernambués revela dois padrões distintos
@@ -9,14 +13,15 @@ em relação às condições habitacionais:
    de abastecimento de água pela rede geral (99,94% em Beiru e 99,84% em Pernambués) e de esgotamento
    sanitário adequado (98,28% em Beiru e 98,86% em Pernambués) superiores à média de Salvador (94,95%).
    A carência extrema de banheiro privativo é quase nula (4 domicílios em Beiru e zero em Pernambués).
-2. **Forte vulnerabilidade na logística de descarte de resíduos:** embora mais de 95% dos domicílios
+2. **Predomínio do descarte em caçamba:** embora mais de 95% dos domicílios
    tenham lixo recolhido pelo serviço de limpeza, **68,22% dos domicílios de Beiru/Tancredo Neves e
    54,66% de Pernambués dependem de caçambas comunitárias** (contra 40,84% em Salvador). Apenas 29,22%
    dos domicílios em Beiru contam com coleta porta a porta.
 
-Essa dependência massiva de caçambas é o principal indicador de precariedade habitacional e urbanística
-revelado pelos dados: reflete a existência de becos estreitos, escadarias íngremes e traçado viário que
-impede o acesso de veículos de serviços públicos essenciais, incluindo viaturas de manutenção da rede elétrica.
+O Censo registra a forma de coleta, não o motivo. O entorno do Censo 2022 (pergunta 4) mostra que
+um terço dos domicílios dos dois bairros fica em vias onde só passam pedestres, bicicletas e motos
+(33,3% em Beiru/Tancredo Neves e 35,0% em Pernambués, contra 22,9% em Salvador). Isso é compatível com
+a hipótese de que o acesso dos caminhões explique parte do uso de caçamba, mas não a comprova.
 
 ## Dados
 
@@ -43,9 +48,9 @@ Comparações territoriais derivadas dos dados:
 
 ## Interpretação
 
-- **O contraste entre rede formal e qualidade efetiva.** A quase totalidade de domicílios ligados à rede de água (99,9%) e esgoto (98,3%–98,9%) atesta que os dois bairros são áreas urbanas consolidadas, integradas à malha metropolitana da EMBASA. Contudo, **a presença de tubulação não garante regularidade de fornecimento**. Em áreas de topografia acidentada e alta densidade demográfica (como Beiru, com 23,4 mil hab/km²), intermitências no abastecimento e baixa pressão na rede são frequentes, obrigando as famílias a instalar reservatórios e motobombas elétricas. Isso gera consumo elétrico adicional não planejado, sobrecarregando o orçamento doméstico.
-- **Topografia, tecido urbano e caçambas de lixo.** A enorme proporção de descarte em caçamba em Beiru (68,2%) e Pernambués (54,7%) expressa fisicamente a configuração espacial dessas comunidades: ocupações em encostas, ruelas estreitas e caminhos de pedestres que impedem o trânsito de caminhões compactadores. A necessidade de deslocamento a pé com resíduos sólidos por longas distâncias favorece pontos de descarte irregular em encostas, gerando riscos ambientais (entupimento de drenagens, proliferação de vetores e instabilidade de taludes na chuva).
-- **Vulnerabilidade socioenergética conexa.** A mesma limitação espacial que impede o caminhão de lixo de chegar à porta do morador dificulta o acesso dos caminhões de emergência da concessionária de energia elétrica (Neoenergia Coelba). Em episódios de temporais, fiação partida, queima de transformadores ou curtos-circuitos, o restabelecimento do fornecimento em ruelas e becos é mais demorado e perigoso, prolongando a interrupção de energia nas residências vulneráveis.
+- **O contraste entre rede formal e qualidade efetiva.** A quase totalidade de domicílios ligados à rede de água (99,9%) e esgoto (98,3%–98,9%) indica áreas urbanas consolidadas, atendidas pela rede pública. Contudo, **a presença de ligação não garante regularidade de fornecimento**, e o Censo não mede intermitência nem pressão. Se houver intermitência, as famílias podem recorrer a reservatórios e bombas elétricas, com consumo de energia adicional. É uma hipótese que exigiria dados da concessionária ou de pesquisa domiciliar para ser verificada.
+- **Tecido urbano e caçambas de lixo.** A alta proporção de descarte em caçamba em Beiru (68,2%) e Pernambués (54,7%) convive com uma parcela grande de domicílios em vias sem circulação de veículos (pergunta 4). Uma explicação possível é a dificuldade de acesso dos caminhões compactadores; outra, a forma como o serviço de limpeza se organiza no bairro. Os dados do Censo não permitem separar as duas. Também não medem a distância até a caçamba nem o descarte irregular.
+- **Possível conexão socioenergética (hipótese).** Se as vias estreitas dificultam o acesso de veículos, também podem dificultar a manutenção da rede elétrica e alongar o restabelecimento depois de falhas. Para verificar isso seriam necessários indicadores de continuidade do fornecimento (por exemplo, duração e frequência de interrupções por conjunto elétrico, publicados pela ANEEL), que não fazem parte deste conjunto de dados (pergunta 7).
 
 ## Limitações
 
