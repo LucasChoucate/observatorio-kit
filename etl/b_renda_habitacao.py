@@ -1,4 +1,4 @@
-"""Etapa B: indicadores de alfabetização e condições habitacionais (água, esgoto, lixo, banheiro).
+"""Etapa B: rendimento do responsável, alfabetização e condições habitacionais.
 
 Fonte: IBGE, Censo Demográfico 2022, Agregados por Setores Censitários (bairros e municípios).
 Downloads (acesso em 2026-11-22), descompactar em data/raw/:
@@ -7,10 +7,12 @@ Downloads (acesso em 2026-11-22), descompactar em data/raw/:
   https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Bairro_csv/Agregados_por_bairros_caracteristicas_domicilio2_BR_20250417.zip
   https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/Agregados_por_Municipio_csv/Agregados_por_municipios_caracteristicas_domicilio2_BR_20250417.zip
 
-Nota sobre rendimento:
-  O Censo Demográfico 2022 não divulgou dados de rendimento/renda nos arquivos de agregados
-  por bairros (verificada ausência no dicionário oficial de variáveis em docs/catalogo/CATALOGO.md).
-  A indisponibilidade metodológica está registrada no catálogo e nos relatórios analíticos.
+Rendimento do responsável (divulgação própria do Censo 2022, fora do diretório principal dos
+agregados; incluída na etapa C como correção, acesso em 2026-11-27):
+  https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/Agregados_por_bairros_renda_responsavel_BR_20260508_csv.zip
+  https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/Agregados_por_municipios_renda_responsavel_BR_20260508_csv.zip
+Dicionário:
+  https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/dicionario_de_dados_renda_responsavel_20260508.xlsx
 
 Uso:
   python etl/b_renda_habitacao.py             # trata, valida, salva CSV e relatório e carrega no Supabase
@@ -20,6 +22,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import math
 import sys
 
 import pandas as pd
@@ -34,6 +37,7 @@ SCRIPT = 'b_renda_habitacao'
 ANO = 2022
 FONTE = 'IBGE_CENSO_2022'
 URL_BASE = 'https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios'
+URL_BASE_RENDA = f'{URL_BASE}_Rendimento_do_Responsavel'
 
 ARQUIVOS = {
     'bairro_alfabetizacao': (
@@ -51,6 +55,14 @@ ARQUIVOS = {
     'municipio_domicilio2': (
         'Agregados_por_municipios_caracteristicas_domicilio2_BR.csv',
         f'{URL_BASE}/Agregados_por_Municipio_csv/Agregados_por_municipios_caracteristicas_domicilio2_BR_20250417.zip',
+    ),
+    'bairro_renda': (
+        'Agregados_por_bairros_renda_responsavel_BR.csv',
+        f'{URL_BASE_RENDA}/Agregados_por_bairros_renda_responsavel_BR_20260508_csv.zip',
+    ),
+    'municipio_renda': (
+        'Agregados_por_municipios_renda_responsavel_BR.csv',
+        f'{URL_BASE_RENDA}/Agregados_por_municipios_renda_responsavel_BR_20260508_csv.zip',
     ),
 }
 
@@ -70,6 +82,20 @@ VARS_ALFA = ['V00900', 'V00901']
 # V00495: Sem banheiro de uso exclusivo com chuveiro e vaso sanitário
 VARS_DOM2 = ['V00111', 'V00309', 'V00310', 'V00397', 'V00398', 'V00494', 'V00495']
 
+# Rendimento do Responsável (dicionario_de_dados_renda_responsavel_20260508.xlsx):
+# V06001: Pessoas responsáveis em domicílios particulares permanentes ocupados
+# V06004: Rendimento nominal médio mensal das pessoas responsáveis com rendimentos (DPPO)
+# V06005: Variância do rendimento nominal mensal das pessoas responsáveis com rendimentos
+# V06006: Rendimento nominal mediano mensal das pessoas responsáveis com rendimentos (DPPO)
+VARS_RENDA = ['V06001', 'V06004', 'V06005', 'V06006']
+
+LIMITACAO_RENDA = (
+    'Rendimento nominal mensal (valores de 2022, sem correção) só das pessoas responsáveis pelo '
+    'domicílio que têm rendimento; não é a renda domiciliar nem per capita e não inclui os '
+    'demais moradores. O arquivo não traz faixas de rendimento (salários mínimos), por isso não '
+    'mede a concentração de baixa renda. '
+)
+
 LIMITACAO_BAIRRO = (
     'Os limites de bairro são os adotados pelo IBGE no Censo 2022, que podem não coincidir com a '
     'percepção local ou com outras delimitações municipais.'
@@ -81,6 +107,47 @@ LIMITACAO_SANEAMENTO = (
 )
 
 INDICADORES = [
+    {
+        'codigo': 'eco_rendimento_medio_responsavel_rs',
+        'nome': 'Rendimento médio mensal do responsável pelo domicílio',
+        'unidade': 'R$',
+        'dimensao': 'economica',
+        'classificacao': 'observado',
+        'descricao': (
+            'Rendimento nominal médio mensal das pessoas responsáveis com rendimentos, em '
+            'domicílios particulares permanentes ocupados.'
+        ),
+        'metodologia': (
+            'Variável V06004, calculada e publicada pelo IBGE no arquivo Agregados por bairros '
+            'renda do responsável (versão 2026-05-08).'
+        ),
+        'limitacoes': (
+            LIMITACAO_RENDA + 'A média é sensível a valores extremos: a variância publicada '
+            '(V06005) indica dispersão muito maior em Beiru/Tancredo Neves; prefira a mediana para '
+            'comparar os bairros. ' + LIMITACAO_BAIRRO
+        ),
+        'variaveis': 'V06004',
+    },
+    {
+        'codigo': 'eco_rendimento_mediano_responsavel_rs',
+        'nome': 'Rendimento mediano mensal do responsável pelo domicílio',
+        'unidade': 'R$',
+        'dimensao': 'economica',
+        'classificacao': 'observado',
+        'descricao': (
+            'Rendimento nominal mediano mensal das pessoas responsáveis com rendimentos, em '
+            'domicílios particulares permanentes ocupados.'
+        ),
+        'metodologia': (
+            'Variável V06006, calculada e publicada pelo IBGE no arquivo Agregados por bairros '
+            'renda do responsável (versão 2026-05-08).'
+        ),
+        'limitacoes': (
+            LIMITACAO_RENDA + 'A mediana é pouco sensível a valores extremos, mas tende a se '
+            'concentrar em valores redondos (como o salário mínimo de 2022). ' + LIMITACAO_BAIRRO
+        ),
+        'variaveis': 'V06006',
+    },
     {
         'codigo': 'soc_taxa_alfabetizacao_pct',
         'nome': 'Taxa de alfabetização (15 anos ou mais)',
@@ -146,8 +213,8 @@ INDICADORES = [
             '(V00397 + V00398) ÷ (V00494 + V00495) × 100 do arquivo Características do Domicílio 2.'
         ),
         'limitacoes': (
-            'Soma a coleta direta e em caçamba. Em bairros com relevo acidentado e vielas, '
-            'o descarte em caçamba predomina sobre a coleta porta a porta. ' + LIMITACAO_BAIRRO
+            'Soma a coleta direta no domicílio e o depósito em caçamba de serviço de limpeza; '
+            'não informa a frequência da coleta nem a distância até a caçamba. ' + LIMITACAO_BAIRRO
         ),
         'variaveis': 'V00397, V00398, V00494, V00495',
     },
@@ -164,8 +231,10 @@ INDICADORES = [
             'V00398 ÷ (V00494 + V00495) × 100 do arquivo Características do Domicílio 2.'
         ),
         'limitacoes': (
-            'Reflete limitações viárias e topográficas para a circulação de caminhões coletores '
-            'no interior das comunidades. ' + LIMITACAO_BAIRRO
+            'Mostra a forma de coleta declarada, não o motivo: o Censo não registra por que o '
+            'domicílio usa caçamba (acesso viário, relevo, organização do serviço etc.). Para '
+            'contexto, compare com urb_via_sem_veiculos_pct (etapa C), sem tratar como causa. '
+            + LIMITACAO_BAIRRO
         ),
         'variaveis': 'V00398, V00494, V00495',
     },
@@ -192,7 +261,7 @@ INDICADORES = [
 
 
 def carregar_fontes(relatorio: RelatorioQualidade) -> pd.DataFrame:
-    """Lê os arquivos de alfabetização e domicílio 2, filtra territórios e consolida."""
+    """Lê os arquivos de alfabetização, domicílio 2 e renda, filtra territórios e consolida."""
     codigos_bairros = list(BAIRROS)
     partes = []
 
@@ -201,7 +270,9 @@ def carregar_fontes(relatorio: RelatorioQualidade) -> pd.DataFrame:
         ('municipio', 'CD_MUN', 'NM_MUN', [CODIGO_SALVADOR]),
     ):
         tabelas = []
-        for tema, variaveis in (('alfabetizacao', VARS_ALFA), ('domicilio2', VARS_DOM2)):
+        for tema, variaveis in (
+            ('alfabetizacao', VARS_ALFA), ('domicilio2', VARS_DOM2), ('renda', VARS_RENDA),
+        ):
             nome, url = ARQUIVOS[f'{nivel}_{tema}']
             caminho = DIR_RAW / nome
             bruto = ler_csv_ibge(caminho)
@@ -220,12 +291,13 @@ def carregar_fontes(relatorio: RelatorioQualidade) -> pd.DataFrame:
                     )
             tabelas.append(converter_colunas(filtrado, variaveis).set_index(coluna_cod))
 
-        alfa, dom2 = tabelas
+        alfa, dom2, renda = tabelas
         relatorio.validar(
-            f'Nome do território consistente entre alfabetização e domicílio 2 ({nivel})',
-            (alfa[coluna_nome] == dom2[coluna_nome]).all(),
+            f'Nome do território consistente entre alfabetização, domicílio 2 e renda ({nivel})',
+            (alfa[coluna_nome] == dom2[coluna_nome]).all()
+            and (alfa[coluna_nome] == renda[coluna_nome]).all(),
         )
-        junto = alfa.join(dom2.drop(columns=[coluna_nome]))
+        junto = alfa.join(dom2.drop(columns=[coluna_nome])).join(renda.drop(columns=[coluna_nome]))
         junto = junto.rename(columns={coluna_nome: 'NOME'})
         junto.index.name = 'CODIGO'
         partes.append(junto)
@@ -233,12 +305,29 @@ def carregar_fontes(relatorio: RelatorioQualidade) -> pd.DataFrame:
     return pd.concat(partes)
 
 
+def numero_br(valor: float, casas: int = 0) -> str:
+    """Número no formato pt-BR (milhar com ponto, decimal com vírgula), só para textos."""
+    texto = f'{valor:,.{casas}f}'
+    return texto.replace(',', '_').replace('.', ',').replace('_', '.')
+
+
+def nota_rendimento(linha: pd.Series) -> str:
+    """Nota da observação de rendimento com a base e a dispersão publicadas pelo IBGE."""
+    desvio = math.sqrt(linha['V06005']) if pd.notna(linha['V06005']) else math.nan
+    return (
+        f"Base: {numero_br(linha['V06001'])} pessoas responsáveis em DPPO (V06001). "
+        f'Desvio-padrão do rendimento dos responsáveis (raiz de V06005): R$ {numero_br(desvio)}.'
+    )
+
+
 def calcular(dados: pd.DataFrame) -> pd.DataFrame:
-    """Calcula indicadores sociais e habitacionais e formata na estrutura longa."""
+    """Calcula indicadores econômicos, sociais e habitacionais e formata na estrutura longa."""
     total_alfa_15 = dados['V00900'] + dados['V00901']
     total_dppo = dados['V00494'] + dados['V00495']
 
     valores = {
+        'eco_rendimento_medio_responsavel_rs': dados['V06004'],
+        'eco_rendimento_mediano_responsavel_rs': dados['V06006'],
         'soc_taxa_alfabetizacao_pct': [
             percentual(sabe, tot) for sabe, tot in zip(dados['V00900'], total_alfa_15)
         ],
@@ -262,14 +351,18 @@ def calcular(dados: pd.DataFrame) -> pd.DataFrame:
     }
 
     origem = {
-        'bairro': 'Agregados_por_bairros_{}.csv',
-        'municipio': 'Agregados_por_municipios_{}.csv',
+        'bairro': 'Agregados_por_bairros_{}_BR.csv',
+        'municipio': 'Agregados_por_municipios_{}_BR.csv',
+    }
+
+    temas = {
+        'eco': 'renda_responsavel', 'soc': 'alfabetizacao', 'hab': 'caracteristicas_domicilio2',
     }
 
     linhas = []
     for indicador in INDICADORES:
         serie = list(valores[indicador['codigo']])
-        tema = 'alfabetizacao' if indicador['codigo'].startswith('soc_') else 'caracteristicas_domicilio2'
+        tema = temas[indicador['codigo'].split('_')[0]]
         for (codigo, linha), valor in zip(dados.iterrows(), serie):
             nivel = 'municipio' if codigo == CODIGO_SALVADOR else 'bairro'
             linhas.append({
@@ -279,7 +372,7 @@ def calcular(dados: pd.DataFrame) -> pd.DataFrame:
                 'fonte_sigla': FONTE,
                 'ano': ANO,
                 'valor': round(float(valor), 4) if pd.notna(valor) else None,
-                'nota': None,
+                'nota': nota_rendimento(linha) if indicador['codigo'].startswith('eco_') else None,
                 'arquivo_origem': origem[nivel].format(tema),
                 'variaveis_origem': indicador['variaveis'],
             })
@@ -324,11 +417,31 @@ def validar(dados: pd.DataFrame, saida: pd.DataFrame, relatorio: RelatorioQualid
             f'{(linha["V00397"] + linha["V00398"]):.0f} vs {tot_dppo:.0f}',
         )
 
+        relatorio.validar(
+            f'{nome}: rendimentos médio e mediano positivos e abaixo de R$ 50 mil',
+            0 < linha['V06006'] < 50000 and 0 < linha['V06004'] < 50000,
+            f"média R$ {linha['V06004']:.2f}, mediana R$ {linha['V06006']:.2f}",
+        )
+        relatorio.validar(
+            f'{nome}: responsáveis (V06001) próximos do total de DPPO (diferença < 1%)',
+            abs(linha['V06001'] - tot_dppo) / tot_dppo < 0.01,
+            f"{linha['V06001']:.0f} responsáveis vs {tot_dppo:.0f} DPPO",
+        )
+        desvio = math.sqrt(linha['V06005'])
+        relatorio.observacoes.append(
+            f'{nome}: desvio-padrão do rendimento dos responsáveis = R$ {numero_br(desvio)} '
+            f"(raiz de V06005), para média de R$ {numero_br(linha['V06004'], 2)} (coeficiente de "
+            f"variação {numero_br(desvio / linha['V06004'], 1)}). Quanto maior a dispersão, mais a "
+            'média é influenciada por valores extremos; por isso a mediana é a medida preferida '
+            'para comparar os territórios.'
+        )
+
     # Validações dos percentuais
+    pct = saida[saida['indicador_codigo'].str.endswith('_pct')]
     relatorio.validar(
         'Todos os percentuais calculados estão entre 0 e 100',
-        saida['valor'].between(0, 100).all(),
-        f'{len(saida)} observações calculadas',
+        pct['valor'].between(0, 100).all(),
+        f'{len(pct)} percentuais calculados',
     )
 
     # Taxa de alfabetização plausível para Salvador (> 80% e < 100%)

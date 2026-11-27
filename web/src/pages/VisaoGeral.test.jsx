@@ -56,6 +56,27 @@ describe('VisaoGeral', () => {
     expect(screen.getByText('Composição etária')).toBeInTheDocument();
   });
 
+  it('mostra o grupo de rendimento com valor em reais quando o indicador existe', async () => {
+    vi.mocked(buscarObservacoes).mockResolvedValue([
+      ...observacoes,
+      obs('111', 'bairro', 'eco_rendimento_mediano_responsavel_rs', 1500, 'R$'),
+    ]);
+    render(<VisaoGeral />);
+    expect(await screen.findByText(/Rendimento do responsável pelo domicílio/)).toBeInTheDocument();
+    expect(screen.getByText('R$ 1.500,00')).toBeInTheDocument();
+  });
+
+  it('mostra os cards de infraestrutura urbana com o aviso sobre iluminação', async () => {
+    vi.mocked(buscarObservacoes).mockResolvedValue([
+      ...observacoes,
+      obs('111', 'bairro', 'urb_iluminacao_publica_pct', 96.5, '%'),
+    ]);
+    render(<VisaoGeral />);
+    expect(await screen.findByText(/Infraestrutura urbana do entorno/)).toBeInTheDocument();
+    expect(screen.getByText('96,5%')).toBeInTheDocument();
+    expect(screen.getByText(/Iluminação pública não mede/)).toBeInTheDocument();
+  });
+
   it('filtra para um bairro pelo seletor', async () => {
     render(<VisaoGeral />);
     await screen.findByRole('heading', { name: 'Bairro Um' });

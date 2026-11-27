@@ -38,6 +38,9 @@ export function formatarDiferencaAbsoluta(valor, unidade, casas) {
   if (unidade === '%') {
     return `${sinal}${formatado} p.p.`;
   }
+  if (unidade === 'R$') {
+    return `${sinal}R$ ${formatado}`;
+  }
   return `${sinal}${formatado}`;
 }
 
@@ -48,11 +51,24 @@ const CASAS_POR_UNIDADE = {
   'hab/km²': 0,
   'km²': 2,
   'moradores/domicílio': 1,
+  R$: 2,
 };
 
-/** Formata o valor de um indicador conforme a unidade. Percentuais recebem o símbolo %. */
+/** Unidades que já aparecem dentro do valor formatado (%, R$) e não precisam de rótulo à parte. */
+export function unidadeNoValor(unidade) {
+  return unidade === '%' || unidade === 'R$';
+}
+
+/**
+ * Formata o valor de um indicador conforme a unidade. Percentuais recebem o símbolo % e
+ * valores monetários o prefixo R$.
+ */
 export function formatarValor(valor, unidade) {
   if (unidade === '%') return formatarPercentual(valor, CASAS_POR_UNIDADE['%']);
+  if (unidade === 'R$') {
+    const numero = formatarNumero(valor, CASAS_POR_UNIDADE.R$);
+    return numero === VAZIO ? VAZIO : `R$ ${numero}`;
+  }
   return formatarNumero(valor, CASAS_POR_UNIDADE[unidade] ?? 2);
 }
 

@@ -32,6 +32,7 @@ const DIMENSOES = [
   { valor: 'social', rotulo: 'Social' },
   { valor: 'habitacional', rotulo: 'Habitacional' },
   { valor: 'economica', rotulo: 'Econômica' },
+  { valor: 'urbana', rotulo: 'Urbana (entorno)' },
 ];
 
 const ROTULOS_COMPACTOS = {
@@ -45,33 +46,47 @@ const ROTULOS_COMPACTOS = {
   hab_lixo_coletado_pct: 'Lixo coletado',
   hab_lixo_cacamba_pct: 'Lixo caçamba',
   hab_sem_banheiro_exclusivo_pct: 'Sem banheiro',
+  urb_iluminacao_publica_pct: 'Iluminação pública',
+  urb_via_pavimentada_pct: 'Via pavimentada',
+  urb_calcada_pct: 'Calçada',
+  urb_bueiro_pct: 'Bueiro',
+  urb_arborizacao_pct: 'Arborização',
+  urb_rampa_cadeirante_pct: 'Rampa',
+  urb_via_sem_veiculos_pct: 'Via sem veículos',
 };
 
+// Textos de leitura de cada dimensão. Não trazem números: os valores ficam na tabela e nos
+// gráficos, que vêm do Supabase. Também não afirmam causas que os dados não medem.
 const ANALISES_DIMENSAO = {
   todas: {
-    titulo: 'Síntese das dimensões integradas',
+    titulo: 'Como ler a comparação',
     texto:
-      'A comparação transversal entre Beiru/Tancredo Neves e Pernambués destaca contrastes de densidade populacional e acesso a serviços públicos, compartilhando contudo alta cobertura nominal de saneamento e níveis de alfabetização superiores a 95%.',
+      'A tabela reúne os indicadores dos dois bairros, com Salvador como referência municipal. As diferenças só aparecem quando os valores são comparáveis (mesmo indicador, mesmo ano e mesma unidade). Use o filtro de dimensão para ler cada tema; a interpretação completa está no relatório do projeto.',
   },
   demografica: {
-    titulo: 'Análise da dimensão demográfica',
+    titulo: 'Leitura da dimensão demográfica',
     texto:
-      'Beiru/Tancredo Neves apresenta densidade demográfica expressivamente superior à de Pernambués e à média municipal, associada a uma população proporcionalmente mais jovem (maior proporção de 0 a 14 anos), sugerindo ocupação mais compacta e demanda concentrada por equipamentos comunitários.',
+      'Compare o tamanho da população, a densidade e a estrutura etária. A densidade usa a área total do bairro (densidade bruta), que inclui vias e áreas não residenciais; sozinha, ela não mede o adensamento dentro das moradias.',
   },
   social: {
-    titulo: 'Análise da dimensão social e escolaridade',
+    titulo: 'Leitura da dimensão social',
     texto:
-      'A taxa de alfabetização aponta sólida escolarização básica nos dois bairros, ambos acima de 95%. Pernambués atinge índice equivalente ao do município de Salvador como um todo, enquanto Beiru/Tancredo Neves fica ligeiramente abaixo, refletindo disparidades na escolarização acumulada.',
+      'A taxa de alfabetização considera quem declara saber ler e escrever, entre as pessoas de 15 anos ou mais. Ela não mede anos de estudo nem a qualidade da escolarização.',
   },
   habitacional: {
-    titulo: 'Análise da dimensão habitacional e saneamento',
+    titulo: 'Leitura da dimensão habitacional',
     texto:
-      'A ligação formal à rede de água e de esgoto é quase universal em ambos os territórios. Contudo, a coleta de lixo expressa vulnerabilidade viária marcante: mais da metade dos domicílios de Pernambués e mais de dois terços de Beiru dependem de caçambas comunitárias por impossibilidade de tráfego de caminhões em vielas e declives.',
+      'Água, esgoto e coleta de lixo indicam a forma de atendimento declarada no Censo, não a regularidade nem a qualidade do serviço. A participação do descarte em caçamba mostra como o lixo é recolhido, mas o Censo não registra o motivo. Os indicadores de entorno (Tela 3), como as faces de quadra sem circulação de veículos, ajudam a contextualizar a diferença, sem provar causa.',
+  },
+  urbana: {
+    titulo: 'Leitura da dimensão urbana (entorno)',
+    texto:
+      'Os indicadores do entorno descrevem a face de quadra onde fica o domicílio, observada pelo recenseador do Censo 2022. Mostram presença do item, não a qualidade nem a manutenção. Iluminação pública não mede a continuidade nem a qualidade do fornecimento de energia nas casas. O detalhe por setor censitário está na Tela 3.',
   },
   economica: {
-    titulo: 'Dimensão econômica e notas metodológicas',
+    titulo: 'Leitura da dimensão econômica',
     texto:
-      'O IBGE não divulgou variáveis de rendimento nominal nem faixas de salário mínimo nos arquivos de agregados por bairros do Censo 2022. Em conformidade com o rigor metodológico do projeto, não foram geradas estimativas artificiais. A alfabetização e as condições de moradia servem como proxies contextuais.',
+      'O rendimento por bairro é o do responsável pelo domicílio (média e mediana, em valores nominais de 2022). A média é sensível a valores extremos, por isso a comparação mais segura é pela mediana. Baixa renda não comprova, sozinha, pobreza energética.',
   },
 };
 
@@ -317,11 +332,11 @@ export default function Comparativo() {
             Nota metodológica sobre rendimento nos agregados censitários
           </h2>
           <p className="mt-1 text-sm text-purple-800">
-            O IBGE não divulgou dados de rendimento médio nem de faixas salariais nos arquivos de
-            agregados por bairros do Censo Demográfico 2022. Em obediência aos padrões do
-            observatório, não estimamos valores artificialmente. Consulte a página de Metodologia e
-            os relatórios para ver os indicadores de capital humano (alfabetização) e habitação
-            adotados como proxies.
+            O rendimento por bairro vem da divulgação &quot;Rendimento do Responsável&quot; do Censo
+            2022: média e mediana do rendimento nominal mensal das pessoas responsáveis com
+            rendimento. Não é renda domiciliar nem per capita, e o arquivo não traz faixas de
+            salário mínimo, por isso a concentração de baixa renda não pode ser calculada nesta
+            escala. A média é sensível a valores extremos; compare preferencialmente a mediana.
           </p>
         </section>
       )}
