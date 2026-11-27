@@ -1,4 +1,4 @@
-import { formatarValor } from '../utils/formatar';
+import { formatarValor, unidadeNoValor } from '../utils/formatar';
 import SeloFonte from './SeloFonte';
 
 /**
@@ -23,7 +23,7 @@ export default function CardIndicador({ titulo, observacao, referencia, rotuloRe
         <h3 className="break-words text-sm font-medium text-stone-600">{nome}</h3>
         <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5 text-2xl font-semibold text-stone-900 tabular-nums">
           <span>{formatarValor(valor, unidade)}</span>
-          {unidade !== '%' && (
+          {!unidadeNoValor(unidade) && (
             <span className="break-words text-xs font-normal text-stone-500">{unidade}</span>
           )}
         </p>
@@ -32,7 +32,7 @@ export default function CardIndicador({ titulo, observacao, referencia, rotuloRe
             {rotuloReferencia ?? referencia.territorio}:{' '}
             <span className="font-medium text-stone-700 tabular-nums">
               {formatarValor(referencia.valor, referencia.unidade)}
-              {referencia.unidade !== '%' && ` ${referencia.unidade}`}
+              {!unidadeNoValor(referencia.unidade) && ` ${referencia.unidade}`}
             </span>
           </p>
         )}

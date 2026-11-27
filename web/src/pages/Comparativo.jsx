@@ -317,11 +317,11 @@ export default function Comparativo() {
             Nota metodológica sobre rendimento nos agregados censitários
           </h2>
           <p className="mt-1 text-sm text-purple-800">
-            O IBGE não divulgou dados de rendimento médio nem de faixas salariais nos arquivos de
-            agregados por bairros do Censo Demográfico 2022. Em obediência aos padrões do
-            observatório, não estimamos valores artificialmente. Consulte a página de Metodologia e
-            os relatórios para ver os indicadores de capital humano (alfabetização) e habitação
-            adotados como proxies.
+            O rendimento por bairro vem da divulgação &quot;Rendimento do Responsável&quot; do Censo
+            2022: média e mediana do rendimento nominal mensal das pessoas responsáveis com
+            rendimento. Não é renda domiciliar nem per capita, e o arquivo não traz faixas de
+            salário mínimo, por isso a concentração de baixa renda não pode ser calculada nesta
+            escala. A média é sensível a valores extremos; compare preferencialmente a mediana.
           </p>
         </section>
       )}

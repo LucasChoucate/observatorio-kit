@@ -23,6 +23,10 @@ const CARDS_DEMOGRAFICOS = [
   'dem_idade_60_mais_pct',
   'dem_mulheres_pct',
 ];
+const CARDS_RENDIMENTO = [
+  'eco_rendimento_mediano_responsavel_rs',
+  'eco_rendimento_medio_responsavel_rs',
+];
 const CARDS_SOCIAIS_HABITACIONAIS = [
   'soc_taxa_alfabetizacao_pct',
   'hab_agua_rede_geral_pct',
@@ -54,14 +58,37 @@ function primeiraObservacao(observacoes, codigos) {
   return observacoes.find((obs) => codigos.includes(obs.indicador_codigo)) ?? null;
 }
 
-function SecaoBairro({ bairro, observacoes, duasColunas }) {
-  const cardsSaneamento = CARDS_SOCIAIS_HABITACIONAIS.map((codigo) => ({
-    codigo,
-    obs: encontrarObservacao(observacoes, codigo, bairro.codigo_ibge),
-    ref: encontrarObservacao(observacoes, codigo, CODIGO_SALVADOR),
-  })).filter((item) => item.obs != null);
+/** Grupo de cards de um tema; some quando o bairro não tem nenhum indicador do grupo no banco. */
+function GrupoCards({ titulo, codigos, bairro, observacoes, gridCards, children }) {
+  const cards = codigos
+    .map((codigo) => ({
+      codigo,
+      obs: encontrarObservacao(observacoes, codigo, bairro.codigo_ibge),
+      ref: encontrarObservacao(observacoes, codigo, CODIGO_SALVADOR),
+    }))
+    .filter((item) => item.obs != null);
+  if (!cards.length) return null;
+  return (
+    <div className="space-y-2 pt-2">
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-500">{titulo}</h3>
+      <div className={gridCards}>
+        {cards.map(({ codigo, obs, ref }) => (
+          <CardIndicador
+            key={codigo}
+            observacao={obs}
+            referencia={ref}
+            rotuloReferencia={ROTULO_SALVADOR}
+          />
+        ))}
+      </div>
+      {children}
+    </div>
+  );
+}
 
+function SecaoBairro({ bairro, observacoes, duasColunas }) {
   const gridCards = `grid gap-3 sm:grid-cols-2 ${duasColunas ? '2xl:grid-cols-3' : 'lg:grid-cols-3'}`;
+  const propsGrupo = { bairro, observacoes, gridCards };
 
   return (
     <section aria-labelledby={`bairro-${bairro.codigo_ibge}`} className="space-y-4">
@@ -87,30 +114,23 @@ function SecaoBairro({ bairro, observacoes, duasColunas }) {
         ))}
       </div>
 
-      {/* ETAPA B: cards de educação e saneamento básico do bairro */}
-      {cardsSaneamento.length > 0 && (
-        <div className="space-y-2 pt-2">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-500">
-            Educação e saneamento básico (Censo 2022)
-          </h3>
-          <div className={gridCards}>
-            {cardsSaneamento.map(({ codigo, obs, ref }) => (
-              <CardIndicador
-                key={codigo}
-                observacao={obs}
-                referencia={ref}
-                rotuloReferencia={ROTULO_SALVADOR}
-              />
-            ))}
-          </div>
-          <div className="rounded-lg border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900">
-            <span className="font-semibold">Rendimento nominal por bairro:</span> O IBGE não
-            publicou variáveis de renda nos arquivos de agregados por bairro do Censo 2022. Os dados
-            de alfabetização e condições habitacionais atuam como proxies contextuais de
-            vulnerabilidade. Consulte a página de Metodologia para detalhes.
-          </div>
-        </div>
-      )}
+      {/* ETAPA B: rendimento do responsável, educação e saneamento básico do bairro */}
+      <GrupoCards
+        titulo="Rendimento do responsável pelo domicílio (Censo 2022)"
+        codigos={CARDS_RENDIMENTO}
+        {...propsGrupo}
+      >
+        <p className="rounded-lg border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900">
+          Rendimento nominal mensal só das pessoas responsáveis com rendimento, não a renda da
+          família nem por pessoa. A média é sensível a valores extremos; para comparar os bairros,
+          prefira a mediana. Baixa renda não comprova, sozinha, pobreza energética.
+        </p>
+      </GrupoCards>
+      <GrupoCards
+        titulo="Educação e saneamento básico (Censo 2022)"
+        codigos={CARDS_SOCIAIS_HABITACIONAIS}
+        {...propsGrupo}
+      />
 
       {/* ETAPA C: acrescentar aqui os cards de infraestrutura urbana deste bairro. */}
     </section>

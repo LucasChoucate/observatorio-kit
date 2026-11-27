@@ -10,6 +10,7 @@ import {
   rotuloClassificacao,
   rotuloEscala,
   siglaInstituicao,
+  unidadeNoValor,
   VAZIO,
 } from './formatar';
 
@@ -55,6 +56,11 @@ describe('formatarDiferencaAbsoluta', () => {
     expect(formatarDiferencaAbsoluta(0, '%')).toBe('0,0 p.p.');
   });
 
+  it('prefixa R$ nas diferenças monetárias', () => {
+    expect(formatarDiferencaAbsoluta(-280.38, 'R$')).toBe('−R$ 280,38');
+    expect(formatarDiferencaAbsoluta(0, 'R$')).toBe('R$ 0,00');
+  });
+
   it('formata contagens absolutas sem p.p.', () => {
     expect(formatarDiferencaAbsoluta(14235, 'pessoas')).toBe('+14.235');
     expect(formatarDiferencaAbsoluta(-6110, 'domicílios')).toBe('−6.110');
@@ -73,6 +79,20 @@ describe('formatarValor', () => {
     expect(formatarValor(15.0367, '%')).toBe('15,0%');
     expect(formatarValor(1.6362, 'km²')).toBe('1,64');
     expect(formatarValor(1.23456, 'outra')).toBe('1,23');
+  });
+
+  it('prefixa R$ nos valores monetários e mantém o traço sem valor', () => {
+    expect(formatarValor(2035.87, 'R$')).toBe('R$ 2.035,87');
+    expect(formatarValor(1212, 'R$')).toBe('R$ 1.212,00');
+    expect(formatarValor(null, 'R$')).toBe(VAZIO);
+  });
+});
+
+describe('unidadeNoValor', () => {
+  it('indica as unidades que já vêm no valor formatado', () => {
+    expect(unidadeNoValor('%')).toBe(true);
+    expect(unidadeNoValor('R$')).toBe(true);
+    expect(unidadeNoValor('pessoas')).toBe(false);
   });
 });
 

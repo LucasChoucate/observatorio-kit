@@ -56,6 +56,16 @@ describe('VisaoGeral', () => {
     expect(screen.getByText('Composição etária')).toBeInTheDocument();
   });
 
+  it('mostra o grupo de rendimento com valor em reais quando o indicador existe', async () => {
+    vi.mocked(buscarObservacoes).mockResolvedValue([
+      ...observacoes,
+      obs('111', 'bairro', 'eco_rendimento_mediano_responsavel_rs', 1500, 'R$'),
+    ]);
+    render(<VisaoGeral />);
+    expect(await screen.findByText(/Rendimento do responsável pelo domicílio/)).toBeInTheDocument();
+    expect(screen.getByText('R$ 1.500,00')).toBeInTheDocument();
+  });
+
   it('filtra para um bairro pelo seletor', async () => {
     render(<VisaoGeral />);
     await screen.findByRole('heading', { name: 'Bairro Um' });
