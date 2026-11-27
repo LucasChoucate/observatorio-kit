@@ -196,7 +196,7 @@ function PainelCamada({ base, camada, indicador }) {
 }
 
 function GraficoEntorno({ base }) {
-  const { indicadores, bairros, observacoesUrbanas } = base;
+  const { bairros, observacoesUrbanas } = base;
   const categorias = CAMADAS.filter(
     (camada) =>
       camada.codigo.startsWith('urb_') &&
@@ -215,13 +215,10 @@ function GraficoEntorno({ base }) {
   const referencia = observacoesUrbanas.find(
     (obs) => obs.indicador_codigo === categorias[0].codigo,
   );
-  const nomes = categorias
-    .map((c) => indicadores.find((i) => i.codigo === c.codigo)?.nome)
-    .filter(Boolean);
   return (
     <GraficoBarras
       titulo="Infraestrutura do entorno: bairros e Salvador"
-      descricao={`Percentual de domicílios cuja face de quadra tem cada característica (${nomes.length} indicadores do entorno, Censo 2022).`}
+      descricao="Percentual de domicílios cuja face de quadra tem cada característica. Em “Via sem veículos”, um valor maior indica mais domicílios em vias onde só passam pedestres, bicicletas e motos."
       dados={montarDadosAgrupados(observacoesUrbanas, categorias, territorios)}
       series={series}
       formatarValor={(v) => formatarPercentual(v)}
