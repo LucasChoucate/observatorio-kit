@@ -27,6 +27,14 @@ const CARDS_RENDIMENTO = [
   'eco_rendimento_mediano_responsavel_rs',
   'eco_rendimento_medio_responsavel_rs',
 ];
+const CARDS_URBANOS = [
+  'urb_iluminacao_publica_pct',
+  'urb_via_pavimentada_pct',
+  'urb_calcada_pct',
+  'urb_bueiro_pct',
+  'urb_arborizacao_pct',
+  'urb_via_sem_veiculos_pct',
+];
 const CARDS_SOCIAIS_HABITACIONAIS = [
   'soc_taxa_alfabetizacao_pct',
   'hab_agua_rede_geral_pct',
@@ -132,7 +140,18 @@ function SecaoBairro({ bairro, observacoes, duasColunas }) {
         {...propsGrupo}
       />
 
-      {/* ETAPA C: acrescentar aqui os cards de infraestrutura urbana deste bairro. */}
+      {/* ETAPA C: infraestrutura urbana do entorno do bairro */}
+      <GrupoCards
+        titulo="Infraestrutura urbana do entorno (Censo 2022)"
+        codigos={CARDS_URBANOS}
+        {...propsGrupo}
+      >
+        <p className="rounded-lg border border-sky-200 bg-sky-50 p-3 text-xs text-sky-900">
+          Percentual de domicílios cuja face de quadra tem cada item. Iluminação pública não mede a
+          continuidade nem a qualidade do fornecimento de energia nas casas. O mapa por setor
+          censitário está na tela Mapa de vulnerabilidade.
+        </p>
+      </GrupoCards>
     </section>
   );
 }
