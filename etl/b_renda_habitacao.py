@@ -213,8 +213,8 @@ INDICADORES = [
             '(V00397 + V00398) ÷ (V00494 + V00495) × 100 do arquivo Características do Domicílio 2.'
         ),
         'limitacoes': (
-            'Soma a coleta direta e em caçamba. Em bairros com relevo acidentado e vielas, '
-            'o descarte em caçamba predomina sobre a coleta porta a porta. ' + LIMITACAO_BAIRRO
+            'Soma a coleta direta no domicílio e o depósito em caçamba de serviço de limpeza; '
+            'não informa a frequência da coleta nem a distância até a caçamba. ' + LIMITACAO_BAIRRO
         ),
         'variaveis': 'V00397, V00398, V00494, V00495',
     },
@@ -231,8 +231,10 @@ INDICADORES = [
             'V00398 ÷ (V00494 + V00495) × 100 do arquivo Características do Domicílio 2.'
         ),
         'limitacoes': (
-            'Reflete limitações viárias e topográficas para a circulação de caminhões coletores '
-            'no interior das comunidades. ' + LIMITACAO_BAIRRO
+            'Mostra a forma de coleta declarada, não o motivo: o Censo não registra por que o '
+            'domicílio usa caçamba (acesso viário, relevo, organização do serviço etc.). Para '
+            'contexto, compare com urb_via_sem_veiculos_pct (etapa C), sem tratar como causa. '
+            + LIMITACAO_BAIRRO
         ),
         'variaveis': 'V00398, V00494, V00495',
     },
