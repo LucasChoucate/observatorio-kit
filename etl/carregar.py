@@ -24,6 +24,8 @@ DIMENSOES = {
     'demografica', 'economica', 'social', 'habitacional', 'urbana', 'energetica', 'socioenergetica'
 }
 CLASSIFICACOES = {'observado', 'derivado', 'proxy'}
+TIPOS_TERRITORIO = {'pais', 'estado', 'municipio', 'bairro', 'setor_censitario'}
+TAMANHO_LOTE = 500  # linhas por requisição de upsert e códigos por consulta .in_()
 
 
 def conectar():
@@ -53,6 +55,48 @@ def buscar_territorio(cliente, codigo_ibge: str) -> dict:
             'supabase/seeds/001_territorios_fontes.sql.'
         )
     return resposta.data[0]
+
+
+def buscar_territorios(cliente, codigos: list[str]) -> dict[str, dict]:
+    """Devolve {codigo_ibge: {'id', 'nome', 'tipo'}} em lotes. Erro se algum código não existir."""
+    unicos = sorted(set(codigos))
+    encontrados = {}
+    for inicio in range(0, len(unicos), TAMANHO_LOTE):
+        lote = unicos[inicio:inicio + TAMANHO_LOTE]
+        resposta = (
+            cliente.table('territorios').select('id, nome, tipo, codigo_ibge')
+            .in_('codigo_ibge', lote).execute()
+        )
+        for linha in resposta.data:
+            encontrados[linha['codigo_ibge']] = {
+                'id': linha['id'], 'nome': linha['nome'], 'tipo': linha['tipo'],
+            }
+    faltando = [c for c in unicos if c not in encontrados]
+    if faltando:
+        raise LookupError(
+            f'Territórios não cadastrados: {faltando[:5]}{"..." if len(faltando) > 5 else ""}. '
+            'Rode o seed supabase/seeds/001_territorios_fontes.sql e, para setores censitários, '
+            'python etl/c_malha.py.'
+        )
+    return encontrados
+
+
+def garantir_territorios(cliente, registros: list[dict]) -> int:
+    """Cria ou atualiza territórios (upsert pelo codigo_ibge). Devolve quantos foram enviados.
+
+    Cada registro tem codigo_ibge, nome, tipo e territorio_pai_id. Usado para os setores
+    censitários do mapa; os territórios fixos (país, estado, município, bairros) vêm do seed.
+    """
+    for reg in registros:
+        if reg['tipo'] not in TIPOS_TERRITORIO:
+            raise ValueError(f"Tipo de território inválido: {reg['tipo']}")
+        if not reg.get('codigo_ibge') or not reg.get('nome'):
+            raise ValueError(f'Território sem código ou nome: {reg}')
+    for inicio in range(0, len(registros), TAMANHO_LOTE):
+        cliente.table('territorios').upsert(
+            registros[inicio:inicio + TAMANHO_LOTE], on_conflict='codigo_ibge'
+        ).execute()
+    return len(registros)
 
 
 def buscar_fonte(cliente, sigla: str) -> int:
@@ -96,12 +140,11 @@ def upsert_observacoes(cliente, df: pd.DataFrame,
     {'estado'} para dados da EPE, garantindo que nada estadual caia em um bairro.
     Devolve o número de linhas enviadas.
     """
-    territorios, fontes, indicadores = {}, {}, {}
+    fontes, indicadores = {}, {}
+    territorios = buscar_territorios(cliente, [str(c) for c in df['codigo_ibge']])
     linhas = []
     for reg in df.to_dict('records'):
         codigo = str(reg['codigo_ibge'])
-        if codigo not in territorios:
-            territorios[codigo] = buscar_territorio(cliente, codigo)
         territorio = territorios[codigo]
         if tipos_permitidos and territorio['tipo'] not in tipos_permitidos:
             raise ValueError(
@@ -130,8 +173,9 @@ def upsert_observacoes(cliente, df: pd.DataFrame,
             'valor': _valor_json(reg['valor']),
             'nota': None if nota is None or pd.isna(nota) or nota == '' else str(nota),
         })
-    if linhas:
+    for inicio in range(0, len(linhas), TAMANHO_LOTE):
         cliente.table('observacoes').upsert(
-            linhas, on_conflict='territorio_id,indicador_id,fonte_id,ano'
+            linhas[inicio:inicio + TAMANHO_LOTE],
+            on_conflict='territorio_id,indicador_id,fonte_id,ano',
         ).execute()
     return len(linhas)
